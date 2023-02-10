@@ -23,10 +23,14 @@ const Header = () => {
         integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
         crossorigin="anonymous"
       />
-      <Navbar color="light" light expand="md">
-      <img src={require('../assets/img/logo.png')} alt="Logo" className="logo" />
+      <Navbar style={{ backgroundColor: "rgb(157 236 190)" }} light expand="md">
         <Container className="d-flex justify-content-between">
-          <Nav className="ml-auto d-flex align-items-center">
+          <img
+            src={require("../assets/img/logo.png")}
+            alt="Logo"
+            className="logo" height={100}
+          />
+          <Nav className="d-flex align-items-center">
             <NavItem>
               <NavLink href="#">Accueil</NavLink>
             </NavItem>
