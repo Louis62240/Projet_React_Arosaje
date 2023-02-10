@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../assets/css/Header.css";
 import {
   Navbar,
@@ -8,8 +8,14 @@ import {
   Container,
   NavbarText,
 } from "reactstrap";
+import { CSSTransition } from "react-transition-group";
+import Accueil from "./Accueil.js";
+import VosPlantes from "./VosPlantes.js";
 
 const Header = () => {
+  const [showAccueil, setShowAccueil] = useState(true);
+  const [showVosPlantes, setShowVosPlantes] = useState(false);
+
   return (
     <>
       <link
@@ -25,22 +31,50 @@ const Header = () => {
         crossorigin="anonymous"
       />
       <Navbar style={{ backgroundColor: "rgb(157 236 190)" }} light expand="md">
-        <Container className="d-flex justify-content-between">
+        <Container className="d-flex align-items-center m-0 ">
           <img
             src={require("../assets/img/logo.png")}
             alt="Logo"
-            className="logo" height={100}
+            className="logo"
+            height={100}
           />
           <Nav className="d-flex align-items-center">
             <NavItem>
-              <NavLink className="NavMenuLink" href="#">Accueil</NavLink>
+              <NavLink
+                className="NavMenuLink"
+                onClick={() => {
+                  setShowAccueil(true);
+                  setShowVosPlantes(false);
+                }}
+              >
+                Accueil
+              </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink className="NavMenuLink" href="#">Vos Plantes</NavLink>
+              <NavLink
+                className="NavMenuLink"
+                onClick={() => {
+                  setShowAccueil(false);
+                  setShowVosPlantes(true);
+                }}
+              >
+                Vos Plantes
+              </NavLink>
             </NavItem>
           </Nav>
           <NavbarText>
-            <i className="fas fa-user" height={100}></i>
+            <i
+              className="fas fa-user fa-2x"
+              style={{ cursor: "pointer" }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = "scale(1.2)";
+                e.target.style.transition = "0.5s";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = "scale(1)";
+                e.target.style.transform = "0.5s";
+              }}
+            ></i>
           </NavbarText>
         </Container>
       </Navbar>
