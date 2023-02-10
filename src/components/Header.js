@@ -1,4 +1,5 @@
 import React from "react";
+import "../assets/css/Header.css";
 import {
   Navbar,
   Nav,
@@ -32,14 +33,14 @@ const Header = () => {
           />
           <Nav className="d-flex align-items-center">
             <NavItem>
-              <NavLink href="#">Accueil</NavLink>
+              <NavLink className="NavMenuLink" href="#">Accueil</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="#">Vos Plantes</NavLink>
+              <NavLink className="NavMenuLink" href="#">Vos Plantes</NavLink>
             </NavItem>
           </Nav>
           <NavbarText>
-            <i className="fas fa-user"></i>
+            <i className="fas fa-user" height={100}></i>
           </NavbarText>
         </Container>
       </Navbar>
