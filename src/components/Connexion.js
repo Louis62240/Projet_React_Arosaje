@@ -30,7 +30,7 @@ const Connexion = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      <button type="submit">Submit</button>
+      <button type="submit">Valider</button>
     </form>
   );
 };
