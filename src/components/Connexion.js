@@ -35,4 +35,4 @@ const Connexion = () => {
   );
 };
 
-export default LoginForm;
+export default Connexion;
