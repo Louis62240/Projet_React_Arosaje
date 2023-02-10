@@ -1,5 +1,12 @@
 import React from "react";
-import { Navbar, NavbarBrand, Nav, NavItem, NavLink, Container } from "reactstrap";
+import {
+  Navbar,
+  Nav,
+  NavItem,
+  NavLink,
+  Container,
+  NavbarText,
+} from "reactstrap";
 
 const Header = () => {
   return (
@@ -10,21 +17,26 @@ const Header = () => {
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
         crossorigin="anonymous"
       />
+      <link
+        rel="stylesheet"
+        href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+        integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
+        crossorigin="anonymous"
+      />
       <Navbar color="light" light expand="md">
-        <Container>
-          <NavbarBrand href="/">Nom de votre entreprise</NavbarBrand>
-          <Nav className="ml-auto" navbar>
+      <img src={require('../assets/img/logo.png')} alt="Logo" className="logo" />
+        <Container className="d-flex justify-content-between">
+          <Nav className="ml-auto d-flex align-items-center">
             <NavItem>
-              <NavLink href="#">Lien 1</NavLink>
+              <NavLink href="#">Accueil</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="#">Lien 2</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="#">Lien 3</NavLink>
+              <NavLink href="#">Vos Plantes</NavLink>
             </NavItem>
           </Nav>
-          <img src="path/to/your/logo.png" alt="Logo" style={{ height: "50px", marginLeft: "10px" }} />
+          <NavbarText>
+            <i className="fas fa-user"></i>
+          </NavbarText>
         </Container>
       </Navbar>
     </>
