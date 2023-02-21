@@ -13,7 +13,7 @@ import Accueil from "./Accueil.js";
 import VosPlantes from "./VosPlantes.js";
 import Profil from "./Profil.js";
 
-const Header = () => {
+const Header = ({ onDisconnect }) => {
   const [showAccueil, setShowAccueil] = useState(true);
   const [showVosPlantes, setShowVosPlantes] = useState(false);
   const [showProfil , setShowProfil] = useState(false);
@@ -79,6 +79,29 @@ const Header = () => {
                   setShowProfil(true);
                 }}
               className="fas fa-user fa-2x"
+              style={{ cursor: "pointer" }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = "scale(1.2)";
+                e.target.style.transition = "0.5s";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = "scale(1)";
+                e.target.style.transform = "0.5s";
+              }}
+            ></i>
+          </NavbarText>
+          <a onClick={onDisconnect}><img src={require("../assets/img/sign-out.png")}
+            alt="Logo"
+            className="logo"
+            height={50}/></a>
+          <i className="fa fa-sign-out fa-2x" aria-hidden="true"></i>
+          <NavbarText>
+            <i onClick={() => {
+                  setShowAccueil(false);
+                  setShowVosPlantes(false);
+                  setShowProfil(true);
+                }}
+              className="fas fa-sign-out fa-2x"
               style={{ cursor: "pointer" }}
               onMouseEnter={(e) => {
                 e.target.style.transform = "scale(1.2)";
