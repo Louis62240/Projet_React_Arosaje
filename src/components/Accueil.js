@@ -134,7 +134,10 @@ const Home = () => {
                 src={require("../assets/img/plante.jpg")}
                 class="card-img-top"
               ></img>
+              <br />
               Description : {PlanteDescriptionSelected}
+              <br />
+              Localisation : {PlanteLocalisationSelected}
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose}>
