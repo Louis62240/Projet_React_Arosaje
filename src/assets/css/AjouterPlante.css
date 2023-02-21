@@ -1,0 +1,9 @@
+.formulaireAjoutPlante
+{
+    margin: 0 auto;
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 1em;
+    background-color: #f3f3f3;
+}

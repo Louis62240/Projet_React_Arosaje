@@ -54,3 +54,17 @@ border: solid 2px rgb(55 182 108);
     border-radius: 0px 0px 0px 20px;
 
 }
+.animated-div {
+    animation-name: slideInRight;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+  }
+  
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0%);
+    }
+  }
