@@ -10,6 +10,7 @@ CREATE TABLE plantes (
 id_plantes INTEGER PRIMARY KEY AUTOINCREMENT,
 proprietaire_id INT,
 gardiens_id INT,
+nom_plante VARCHAR(255),
 description_plante VARCHAR(255),
 localisation VARCHAR(255),
 FOREIGN KEY (proprietaire_id) REFERENCES utilisateurs(id_utilisateurs),
