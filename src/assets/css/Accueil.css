@@ -1,0 +1,56 @@
+.SearchBarDiv{
+display:flex;
+padding:1%;
+border: solid 2px rgb(55 182 108);
+}
+.SearchBar{
+    margin-left:auto;
+}
+.texteStatut
+{
+    font-size: 1.5em;
+    margin: 0;
+    padding: 0;
+    color:black;
+
+}
+.buttonAdd
+{
+    background-color: rgb(55 182 108);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5em;
+    margin: 0.5em;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+.PlanteBrique
+{
+    display:flex;
+}
+.PlanteBriqueInside
+{
+    margin:1%;
+}
+.buttonEnSavoirPlus
+{
+    background-color: rgb(55 182 108) !important;
+    width: 100%;
+}
+.imgLocalisation
+{
+    width: 2em;
+    height: 2em;
+    margin: 0.5em;
+}
+.positionLocalisation
+{
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    background: white;
+    padding-right: 2%;
+    border-radius: 0px 0px 0px 20px;
+
+}

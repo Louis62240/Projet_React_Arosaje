@@ -6,8 +6,8 @@ function App() {
   return (
     <div className="App">
       <HeaderComponent></HeaderComponent>
-      <ConnexionComponent></ConnexionComponent>
-      <InscriptionComponent></InscriptionComponent>
+      {/* <ConnexionComponent></ConnexionComponent> */}
+      {/* <InscriptionComponent></InscriptionComponent> */}
     </div>
   );
 }
