@@ -193,14 +193,10 @@ const Header = ({ onDisconnect }) => {
                       </NavbarText>
                     </Container>
                   </Navbar>
-                  <CSSTransition
-                    in={showVosPlantes}
-                    timeout={300}
-                    classNames="vosPlantes"
-                    unmountOnExit
-                  >
+                  <div className="animated-div">
+
                     <VosPlantes />
-                  </CSSTransition>
+                  </div>
                 </>
               );
             }

@@ -30,8 +30,8 @@ const Connexion = ({ onConnect }) => {
             {showRegisterForm ? (
               <form className="register-form">
                 <input type="text" placeholder="name" />
-                <input type="password" placeholder="password" />
-                <input type="text" placeholder="email address" />
+                <input type="password" placeholder="mot de passe" />
+                <input type="text" placeholder="email" />
                 <button>create</button>
                 <p className="message">
                   Already registered?{" "}
@@ -42,13 +42,13 @@ const Connexion = ({ onConnect }) => {
               </form>
             ) : (
               <form className="login-form">
-                <input type="text" placeholder="username" />
-                <input type="password" placeholder="password" />
-                <button onClick={handleClick}>login</button>
+                <input type="text" placeholder="Adresse mail" />
+                <input type="password" placeholder="Mot de passe" />
+                <button onClick={handleClick}>Se connecter</button>
                 <p className="message">
-                  Not registered?{" "}
+                  Vous n'avez pas de compte?{" "}
                   <a href="#" onClick={handleShowRegisterForm}>
-                    Create an account
+                    S'inscrire
                   </a>
                 </p>
               </form>
