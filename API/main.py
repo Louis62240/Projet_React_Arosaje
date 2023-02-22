@@ -69,6 +69,20 @@ async def add_article(nom : str, mot_de_passe : str, telephone: int, email: str)
         print("Error: ", e)
         raise HTTPException(status_code=409, detail="Utilisateur existe déjà")
 
+
+# route pour la connexion
+@app.post("/connexion")
+async def connexion(email: str, mot_de_passe: str):
+    # Récupération de l'utilisateur correspondant à l'email donné
+    c.execute("SELECT mot_de_passe FROM utilisateurs WHERE email=?", (email, ))
+    result = c.fetchone()
+
+    # Vérification du mot de passe
+    if result is not None and (mot_de_passe == result[0]):
+        return {"connexion": True}
+    else:
+        return {"connexion": False}
+
 #liste toutes les plantes
 @app.get("/plantes")
 async def get_articles():
@@ -157,3 +171,20 @@ async def update_plante_gardien(id_plante: int, nom_gardien: str):
     except Exception as e:
         print("Error: ", e)
         raise HTTPException(status_code=404, detail="Plante non trouvée")
+
+#supprime une plante et ce qui lui est assoscié
+@app.delete("/plante/{id_plante}")
+async def delete_plante(id_plante: int):
+    # Supprimer la plante de la table plantes
+    c.execute("DELETE FROM plantes WHERE id_plantes = ?", (id_plante,))
+    conn.commit()
+
+    # Supprimer les conseils associés à la plante de la table conseil_plante
+    c.execute("DELETE FROM conseil_plante WHERE id_plantes = ?", (id_plante,))
+    conn.commit()
+
+    # Supprimer les photos associées à la plante de la table plante_photos
+    c.execute("DELETE FROM plante_photos WHERE id_plantes = ?", (id_plante,))
+    conn.commit()
+
+    return {"status": "success"}
