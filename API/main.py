@@ -3,9 +3,12 @@ import sqlite3 as sq
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import sqlite3worker
+from fastapi.middleware.cors import CORSMiddleware
+
 
 conn = sq.connect("arosa_je.db")
 c = conn.cursor()
+
 
 if conn:
     print("---------------------------------")
@@ -17,6 +20,18 @@ else:
     print("---------------------------------")
 
 app = FastAPI()
+origins = [
+    "http://localhost/",
+    "http://localhost:3000/",
+    "http://localhost:3001/",
+    "http://localhost:8000/",
+    "http://127.0.0.1/",
+    "http://127.0.0.1:3000/",
+    "http://127.0.0.1:3001/",
+    "http://127.0.0.1:8000/",
+    "http://localhost:3000",] 
+
+app.add_middleware(CORSMiddleware,allow_origins=origins,allow_credentials=True,allow_methods=[""],allow_headers=[""])
 
 #ajoute une plante
 @app.post("/plante")

@@ -17,6 +17,7 @@ border: solid 2px rgb(55 182 108);
 .buttonAdd
 {
     background-color: rgb(55 182 108);
+    border-color: white !important;
     color: white;
     border: none;
     border-radius: 5px;
@@ -36,6 +37,7 @@ border: solid 2px rgb(55 182 108);
 .buttonEnSavoirPlus
 {
     background-color: rgb(55 182 108) !important;
+    border-color: white !important;
     width: 100%;
 }
 .imgLocalisation
