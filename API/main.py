@@ -31,11 +31,7 @@ origins = [
     "http://127.0.0.1:8000/",
     "http://localhost:3000",] 
 
-app.add_middleware(CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],)
+app.add_middleware(CORSMiddleware,allow_origins=origins,allow_credentials=True,allow_methods=[""],allow_headers=[""])
 
 #ajoute une plante
 @app.post("/plante")
@@ -89,10 +85,34 @@ async def connexion(email: str, mot_de_passe: str):
 
 #liste toutes les plantes
 @app.get("/plantes")
-async def get_articles():
-    c.execute("SELECT * FROM plantes;")
-    articles = c.fetchall()
-    return articles
+async def get_plantes():
+    c.execute("""
+        SELECT 
+            plantes.*,
+            plante_photos.photo_url,
+            GROUP_CONCAT(conseil_plante.conseil, '; ') as conseils
+        FROM 
+            plantes
+            LEFT JOIN plante_photos ON plantes.id_plantes = plante_photos.id_plantes
+            LEFT JOIN conseil_plante ON plantes.id_plantes = conseil_plante.id_plantes
+        GROUP BY plantes.id_plantes;
+    """)
+    plantes = c.fetchall()
+    response = []
+    for plante in plantes:
+        plante_dict = {
+            "id_plante": plante[0],
+            "proprietaire_id": plante[1],
+            "gardiens_id": plante[2],
+            "nom_plante": plante[3],
+            "description_plante": plante[4],
+            "localisation": plante[5],
+            "photo_url": plante[6],
+            "conseils": plante[7]
+        }
+        response.append(plante_dict)
+    return response
+
 
 @app.get("/plante/{id_plante}")
 async def get_plante_info(id_plante: int):
