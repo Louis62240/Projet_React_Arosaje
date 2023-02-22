@@ -39,14 +39,10 @@ app.add_middleware(CORSMiddleware,
 
 #ajoute une plante
 @app.post("/plante")
-async def add_article(proprietaire_id : int, gardiens_id : int, nom_plante : str, description_plante: str, localisation: str):
-    try:
-        c.execute("INSERT INTO plantes (proprietaire_id, gardiens_id, nom_plante description_plante, localisation) VALUES (?, ?, ?, ?)", (proprietaire_id, gardiens_id, nom_plante, description_plante, localisation))
-        conn.commit()
-        return {"status": "success", "id": c.lastrowid}
-    except Exception as e:
-        print("Error: ", e)
-        raise HTTPException(status_code=409, detail="Plante existe déjà")
+async def add_article(proprietaire_id: int, nom_plante: str, description_plante: str, localisation: str, *, gardiens_id: int = None):
+    c.execute("INSERT INTO plantes (proprietaire_id, nom_plante, description_plante, localisation, gardiens_id) VALUES (?, ?, ?, ?, ?)", (proprietaire_id, nom_plante, description_plante, localisation, gardiens_id))
+    conn.commit()
+    return {"status": "success", "id": c.lastrowid}
 
 # ajouter un conseil à une plante
 @app.post('/conseil/{id_plante}')
@@ -138,6 +134,7 @@ async def get_utilisateurs():
     utilisateurs = c.fetchall()
     return utilisateurs
 
+#donne l'id de l'utilisateur selon son nom
 @app.get("/utilisateur/{nom}")
 async def get_id_utilisateur_by_nom(nom: str):
     c.execute("SELECT id_utilisateurs FROM utilisateurs WHERE LOWER(nom) = LOWER(?)", (nom,))
