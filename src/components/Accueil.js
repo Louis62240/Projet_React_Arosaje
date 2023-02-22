@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { Form } from "react-bootstrap";
 import AjoutPlante from "./AjoutPlante";
 import "../assets/css/Accueil.css";
+import {getPlantes,getPlanteById} from '../services/api'
+
 const Home = () => {
   const Plante = [
     {
@@ -29,27 +31,46 @@ const Home = () => {
     {
       name: "Marguerite",
       description: "A arroser tous les 2 jours",
-      Localisation: "Roubaix",
+      Localisation: "Roubaix", 
     },
   ];
+  const [plantes, setPlantes] = useState([]);
+  useEffect(() => {
+    getPlantes().then(data => {
+      setPlantes(data);
+      console.log(data)
+    });
+  }, []);
+
 
   const [image, setImage] = useState(null);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [localisation, setLocalisation] = useState("");
 
   const [PlanteNameSelected, setPlanteNameSelected] = useState("");
   const [PlanteDescriptionSelected, setPlanteDescriptionSelected] =
     useState("");
   const [PlanteLocalisationSelected, setPlanteLocalisationSelected] =
     useState("");
+  const [PlanteConseilSelected, setPlanteConseilSelected] = useState("");
+  const [PlanteProprietaire, setPlanteProprietaire] = useState("");
 
-  const recupDataPlante = (plante) => {
-    setPlanteNameSelected(plante.name);
-    setPlanteDescriptionSelected(plante.description);
-    setPlanteLocalisationSelected(plante.Localisation);
-    handleShow();
-  };
+    const recupDataPlante = (plante) => {
+      // plante est un tableau contenant les informations de la plante
+      const id = plante[0];
+      getPlanteById(id)
+        .then((data) => {
+          // Mettre à jour les variables d'état avec les informations de la plante sélectionnée
+          console.log(data);
+          setPlanteNameSelected(data.nom_plante);
+          setPlanteDescriptionSelected(data.localisation);
+          setPlanteLocalisationSelected(data.description_plante);
+          setPlanteConseilSelected(data.conseil);
+          setPlanteProprietaire(data.nom_proprietaire);
+          handleShow();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
@@ -93,38 +114,38 @@ const Home = () => {
           </button>
         </div>
         <div>
-          <div className="PlanteBrique">
-            {Plante.map((plante) => (
-              <div class="PlanteBriqueInside card" style={{ width: "18rem" }}>
-                <img
-                  src={require("../assets/img/plante.jpg")}
-                  class="card-img-top"
-                  alt="..."
-                />
-                <div class="card-body">
-                  <h5 class="card-title">{plante.name}</h5>
-                  <p className="positionLocalisation">
-                    <img
-                      src={require("../assets/img/localisation.png")}
-                      className="imgLocalisation"
-                    />
-                    {plante.Localisation}
-                  </p>
-                  <p class="card-text">{plante.description}</p>
-                  <button
-                    class="buttonEnSavoirPlus btn btn-primary"
-                    data-toggle="modal"
-                    data-target="#exampleModal"
-                    onClick={() => {
-                      recupDataPlante(plante);
-                    }}
-                  >
-                    En savoir plus
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="PlanteBrique">
+  {plantes.map((plante) => (
+    <div className="PlanteBriqueInside card" style={{ width: "18rem" }}>
+      <img
+        src={require("../assets/img/plante.jpg")}
+        className="card-img-top"
+        alt="..."
+      />
+      <div className="card-body">
+        <h5 className="card-title">{plante[3]}</h5>
+        <p className="positionLocalisation">
+          <img
+            src={require("../assets/img/localisation.png")}
+            className="imgLocalisation"
+          />
+          {plante[5]}
+        </p>
+        <p className="card-text">{plante[4]}</p>
+        <button
+          className="buttonEnSavoirPlus btn btn-primary"
+          data-toggle="modal"
+          data-target="#exampleModal"
+          onClick={() => {
+            recupDataPlante(plante);
+          }}
+        >
+          En savoir plus
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
               <Modal.Title>{PlanteNameSelected}</Modal.Title>
@@ -134,10 +155,13 @@ const Home = () => {
                 src={require("../assets/img/plante.jpg")}
                 class="card-img-top"
               ></img>
+              Proprietaire : {PlanteProprietaire}
               <br />
               Description : {PlanteDescriptionSelected}
               <br />
               Localisation : {PlanteLocalisationSelected}
+              <br />
+              Conseil : {PlanteConseilSelected}
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose}>

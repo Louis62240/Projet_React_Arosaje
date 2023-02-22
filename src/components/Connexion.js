@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "../assets/css/Connexion.css";
-import getPlantes from '../services/api'
 
 const Connexion = ({ onConnect }) => {
   const [showRegisterForm, setShowRegisterForm] = useState(false);
@@ -8,15 +7,6 @@ const Connexion = ({ onConnect }) => {
   const handleClick = () => {
     onConnect();
   };
-
-  getPlantes()
-  .then(data => {
-    // Utiliser les données retournées par la fonction getUsers
-    console.log(data);
-  })
-  .catch(error => {
-    console.log(error);
-  });
 
 
   const handleShowRegisterForm = () => {
