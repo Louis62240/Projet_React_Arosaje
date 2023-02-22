@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../assets/css/AjouterPlante.css";
+import {addPlante} from '../services/api'
 
 const AjoutPlante = () => {
   const [city, setCity] = useState("");
