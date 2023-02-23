@@ -1,64 +1,52 @@
-import React, { useState } from "react";
-import "../assets/css/Connexion.css";
+import { useState } from 'react';
+import { checkConnexion } from '../services/api';
+import '../assets/css/Connexion.css';
 
-const Connexion = ({ onConnect }) => {
-  const [showRegisterForm, setShowRegisterForm] = useState(false);
+function Connexion({ onConnect }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleClick = () => {
-    onConnect();
-  };
+  const handleEmailChange = (event) => setEmail(event.target.value);
+  const handlePasswordChange = (event) => setPassword(event.target.value);
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  const handleShowRegisterForm = () => {
-    setShowRegisterForm(true);
-  };
+    const isLoginValid = await checkConnexion(email, password, onConnect);
 
-  const handleHideRegisterForm = () => {
-    setShowRegisterForm(false);
+    if (isLoginValid) {
+      console.log('yesss'); // Connexion réussie, rediriger vers la page d'accueil
+    } else {
+      setErrorMessage('Adresse email ou mot de passe incorrect.'); // Afficher un message d'erreur
+    }
   };
 
   return (
-    <>
-      <div className="BodyConnexion">
-        <img
-          src={require("../assets/img/logo.png")}
-          alt="Logo"
-          className="logo"
-          height={100}
-        />
-        <div className="login-page">
-          <div className="form">
-            {showRegisterForm ? (
-              <form className="register-form">
-                <input type="text" placeholder="Nom" />
-                <input type="password" placeholder="Mot de passe" />
-                <input type="text" placeholder="Adresse mail" />
-                <button>Crée un compte</button>
-                <p className="message">
-                  Déjà inscrit ?{" "}
-                  <a href="#" onClick={handleHideRegisterForm}>
-                    Se connecter
-                  </a>
-                </p>
-              </form>
-            ) : (
-              <form className="login-form">
-                <input type="text" placeholder="Adresse mail" />
-                <input type="password" placeholder="Mot de passe" />
-                <button onClick={handleClick}>Se connecter</button>
-                <p className="message">
-                  Vous n'avez pas de compte?{" "}
-                  <a href="#" onClick={handleShowRegisterForm}>
-                    S'inscrire
-                  </a>
-                </p>
-              </form>
-            )}
-          </div>
+    <div className='PlacementCard'>
+    <div className="card">
+    <img
+            src={require("../assets/img/logo.png")}
+            alt="Logo"
+            className="logo"
+            height={100}
+          />
+      <form className='formConnexion' onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label className='labelConnexion' htmlFor="email">Adresse email :</label>
+          <input className='InputConnexion' type="email" id="email" name="email" value={email} onChange={handleEmailChange} />
         </div>
-      </div>
-    </>
+        <div className="form-group">
+          <label className='labelConnexion' htmlFor="password">Mot de passe :</label>
+          <input className='InputConnexion' type="password" id="password" name="password" value={password} onChange={handlePasswordChange} />
+        </div>
+        {errorMessage && <div className="error">{errorMessage}</div>}
+        <button className="btn" type="submit">Se connecter</button>
+        
+      </form>
+    </div>
+    </div>
   );
-};
+}
 
 export default Connexion;

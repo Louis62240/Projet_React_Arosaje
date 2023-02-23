@@ -20,18 +20,28 @@ else:
     print("---------------------------------")
 
 app = FastAPI()
-origins = [
-    "http://localhost/",
-    "http://localhost:3000/",
-    "http://localhost:3001/",
-    "http://localhost:8000/",
-    "http://127.0.0.1/",
-    "http://127.0.0.1:3000/",
-    "http://127.0.0.1:3001/",
-    "http://127.0.0.1:8000/",
-    "http://localhost:3000",] 
 
-app.add_middleware(CORSMiddleware,allow_origins=origins,allow_credentials=True,allow_methods=[""],allow_headers=[""])
+# Liste des origines autorisées
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://localhost:8000",
+    "http://127.0.0.1",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
+    "http://127.0.0.1:8000",
+    "http://localhost:3000",
+]
+
+# Middleware CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 #ajoute une plante
 @app.post("/plante")
@@ -71,7 +81,7 @@ async def add_article(nom : str, mot_de_passe : str, telephone: int, email: str)
 
 
 # route pour la connexion
-@app.post("/connexion")
+@app.get("/connexion")
 async def connexion(email: str, mot_de_passe: str):
     # Récupération de l'utilisateur correspondant à l'email donné
     c.execute("SELECT mot_de_passe FROM utilisateurs WHERE email=?", (email, ))
