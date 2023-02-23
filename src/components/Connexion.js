@@ -50,14 +50,16 @@ function Connexion({ onConnect }) {
   };
 
   return (
-    <div className='PlacementCard'>
-      <div className="cardConnexion">
-        <img
+    <>
+    <img
           src={require("../assets/img/logo.png")}
           alt="Logo"
           className="logo"
           height={100}
         />
+    <div className='PlacementCard'>
+      <div className="cardConnexion">
+        
         {isLoginForm ? (
           <form className='formConnexion animated-div' onSubmit={handleSubmit}>
             <div className="form-group">
@@ -103,6 +105,7 @@ function Connexion({ onConnect }) {
         )}
       </div>
     </div>
+    </>
   );
 }
 

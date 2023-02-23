@@ -92,7 +92,7 @@ const Header = ({ onDisconnect }) => {
           <a className='PlacementElementUser' onClick={onDisconnect}><img src={require("../assets/img/sign-out.png")}
             alt="Logo"
             className="logo"
-            height={50}/></a>
+            height={35}/></a>
           <div>
             <i onClick={() => {
                   setShowAccueil(false);
