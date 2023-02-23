@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { checkConnexion } from '../services/api';
+import { checkConnexion , addUser} from '../services/api';
 import '../assets/css/Connexion.css';
 
 function Connexion({ onConnect }) {
@@ -8,8 +8,18 @@ function Connexion({ onConnect }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoginForm, setIsLoginForm] = useState(true); // state pour savoir quel formulaire afficher
 
+  const [nom, setNom] = useState("");
+  const [motDePasse, setMotDePasse] = useState("");
+  const [telephone, setTelephone] = useState("");
+  const [emailInscription, setEmailInscription] = useState("");
+  const [error, setError] = useState(null);
+
   const handleEmailChange = (event) => setEmail(event.target.value);
   const handlePasswordChange = (event) => setPassword(event.target.value);
+
+  // addUser('Louis', 'bebou', '0751663896', 'l.hanquiez22@gmail.com')
+  // .then(data => console.log(data))
+  // .catch(error => console.log(error));
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,6 +30,17 @@ function Connexion({ onConnect }) {
       console.log('yesss'); // Connexion réussie, rediriger vers la page d'accueil
     } else {
       setErrorMessage('Adresse email ou mot de passe incorrect.'); // Afficher un message d'erreur
+    }
+  };
+
+  const handleSubmitInscription = async (event) => {
+    event.preventDefault();
+    try {
+      const result = await addUser(nom, motDePasse, telephone, email);
+      console.log(result);
+      // Ajouter ici le code pour rediriger vers une autre page ou afficher un message de confirmation
+    } catch (error) {
+      setError(error.message);
     }
   };
 
@@ -48,25 +69,34 @@ function Connexion({ onConnect }) {
             </div>
             {errorMessage && <div className="error">{errorMessage}</div>}
             <br/>
-            <button className="btn" type="submit">Se connecter</button><br/>
+            <button className="btnConnexion" type="submit">Se connecter</button><br/>
             <a className='buttonSecondaire' onClick={handleSwitchForm}>Vous ne possèdez pas de Compte ? Cliquez ici</a>
           </form>
         ) : (
-          <form className='formInscription'>
+          <form className='formInscription' onSubmit={handleSubmitInscription}>
+            <div className="form-group">
+              <label className='labelConnexion' htmlFor="nom">Nom :</label>
+              <input className='InputConnexion' type="text" id="nom" name="nom" value={nom}
+          onChange={(event) => setNom(event.target.value)} />
+            </div>
             <div className="form-group">
               <label className='labelConnexion' htmlFor="email">Adresse email :</label>
-              <input className='InputConnexion' type="email" id="email" name="email" />
+              <input className='InputConnexion' type="email" id="email" name="email"  value={emailInscription}
+          onChange={(event) => setEmailInscription(event.target.value)}/>
             </div>
             <div className="form-group">
               <label className='labelConnexion' htmlFor="password">Mot de passe :</label>
-              <input className='InputConnexion' type="password" id="password" name="password" />
+              <input className='InputConnexion' type="password" id="password" name="password" value={motDePasse}
+          onChange={(event) => setMotDePasse(event.target.value)}/>
             </div>
             <div className="form-group">
-              <label className='labelConnexion' htmlFor="confirmPassword">Confirmer le mot de passe :</label>
-              <input className='InputConnexion' type="password" id="confirmPassword" name="confirmPassword" />
+              <label className='labelConnexion' htmlFor="telephone">Telephone :</label>
+              <input className='InputConnexion' type="text" id="telephone" name="telephone"   value={telephone}
+          onChange={(event) => setTelephone(event.target.value)}/>
             </div>
             <br/>
-            <button className="btn" type="submit">S'inscrire</button><br/>
+            <button className="btnConnexion" type="submit">S'inscrire</button><br/>
+            {error && <div className="error">{error}</div>}
             <a className='buttonSecondaire' onClick={handleSwitchForm}>Vous avez déja un compte ? Cliquez ici</a>
           </form>
         )}

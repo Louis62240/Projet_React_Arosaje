@@ -83,7 +83,24 @@ export async function checkConnexion(email, password,onConnect) {
     return false;
   }
 }
+const addUser = async (nom, mot_de_passe, telephone, email) => {
+  const url = `http://127.0.0.1:8000/utilisateur?nom=${nom}&mot_de_passe=${mot_de_passe}&telephone=${telephone}&email=${email}`;
+  try {
+    const response = await axios.post(url, {
+      headers: {
+        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log(response.data); // affiche les données dans la console
+    return response.data; // retourne les données sous forme d'objet JSON
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 
 
-export { getPlantes ,getPlanteById,addPlante};
+
+
+export { getPlantes ,getPlanteById,addPlante,addUser};
