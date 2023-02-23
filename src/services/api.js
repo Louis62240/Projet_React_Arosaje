@@ -46,6 +46,18 @@ const addPlante = async (proprietaire_id, nom_plante, description_plante, locali
     console.log(error);
   }
 };
+export const addPhoto = async (photoUrl, idPlante) => {
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/photo/${idPlante}?photo_url=${photoUrl}`, {
+      method: 'POST'
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const CHECK_LOGIN_URL = 'http://127.0.0.1:8000/connexion';
 
 /**

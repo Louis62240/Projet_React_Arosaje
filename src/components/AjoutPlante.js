@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { addPlante } from "../services/api";
+import { addPlante , addPhoto} from "../services/api";
 import "../assets/css/AjouterPlante.css";
+import { Alert } from 'reactstrap';
 
 const AjoutPlante = () => {
   const [proprietaireId, setProprietaireId] = useState("");
@@ -8,15 +9,26 @@ const AjoutPlante = () => {
   const [descriptionPlante, setDescriptionPlante] = useState("");
   const [localisation, setLocalisation] = useState("");
   const [afficherDeuxiemeFormulaire, setAfficherDeuxiemeFormulaire] = useState(false);
+  const [idPlante, setIdPlante] = useState("");
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (afficherDeuxiemeFormulaire) {
-      try {
-        // Ajouter la plante et l'image ici
+    event.preventDefault(); 
+    try {
+        const response = await addPlante(
+          proprietaireId,
+          nomPlante,
+          descriptionPlante,
+          localisation,
+        );
+        console.log(response); // affiche les données dans la console
+        alert("Plante ajoutée avec succès");
+        setIdPlante(response.id);
       } catch (error) {
         console.log(error);
       }
+    if (afficherDeuxiemeFormulaire) {
+      
+     
     } else {
       setAfficherDeuxiemeFormulaire(true);
     }
@@ -30,10 +42,24 @@ const AjoutPlante = () => {
   const handleSubmit2 = async (event) => {
     event.preventDefault();
     // Code pour envoyer le fichier vers le serveur
+    try {
+      const response = await addPhoto(
+        selectedFile,
+        idPlante,
+      );
+      alert("Photo ajoutée avec succès");
+      console.log(response); // affiche les données dans la console
+    } catch (error) {
+      console.log(error);
+    }
   };
 
 
   return (
+    <>
+    <Alert color="success">
+    This is a success alert — check it out!
+  </Alert>
     <div className='formulaireAjoutPlante'>
       {!afficherDeuxiemeFormulaire && (
       <form onSubmit={handleSubmit}>
@@ -74,8 +100,8 @@ const AjoutPlante = () => {
           />
         </div>
         <div className="PlacementButton">
-          <button className="buttonAdd" type="submit">
-            {afficherDeuxiemeFormulaire ? "Ajouter la plante et l'image" : "Suivant"}
+          <button className="buttonAddPlante" type="submit">
+            Suivant
           </button>
         </div>
       </form>
@@ -94,9 +120,7 @@ const AjoutPlante = () => {
               accept="image/*"
             />
           </div>
-          <button className="buttonAdd" type="submit">Envoyer</button>
-        </form>
-        <div className="preview-image-container">
+          <div className="preview-image-container">
           {selectedFile && (
             <img
               className="preview-image"
@@ -105,10 +129,16 @@ const AjoutPlante = () => {
             />
           )}
         </div>
+        <div className="PlacementButton">
+          <button className="buttonAddPlante" type="submit">Envoyer</button>
+        </div>
+        </form>
+       
       </div>
       )}
-    </div>
+    </div></>
   );
+  
 };
 
 export default AjoutPlante;
