@@ -43,12 +43,14 @@ const AjoutPlante = () => {
     event.preventDefault();
     // Code pour envoyer le fichier vers le serveur
     try {
+      
       const response = await addPhoto(
         selectedFile,
         idPlante,
       );
       alert("Photo ajoutée avec succès");
       console.log(response); // affiche les données dans la console
+
     } catch (error) {
       console.log(error);
     }

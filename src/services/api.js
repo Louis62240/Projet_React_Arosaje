@@ -48,6 +48,7 @@ const addPlante = async (proprietaire_id, nom_plante, description_plante, locali
 };
 export const addPhoto = async (photoUrl, idPlante) => {
   try {
+    console.log(photoUrl);
     const response = await fetch(`http://127.0.0.1:8000/photo/${idPlante}?photo_url=${photoUrl}`, {
       method: 'POST'
     });
