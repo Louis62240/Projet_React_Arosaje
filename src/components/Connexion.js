@@ -59,7 +59,7 @@ function Connexion({ onConnect }) {
           height={100}
         />
         {isLoginForm ? (
-          <form className='formConnexion' onSubmit={handleSubmit}>
+          <form className='formConnexion animated-div' onSubmit={handleSubmit}>
             <div className="form-group">
               <label className='labelConnexion' htmlFor="email">Adresse email :</label>
               <input className='InputConnexion' type="email" id="email" name="email" value={email} onChange={handleEmailChange} />
@@ -74,7 +74,7 @@ function Connexion({ onConnect }) {
             <a className='buttonSecondaire' onClick={handleSwitchForm}>Vous ne possèdez pas de Compte ? Cliquez ici</a>
           </form>
         ) : (
-          <form className='formInscription' onSubmit={handleSubmitInscription}>
+          <form className='formInscription animated-div' onSubmit={handleSubmitInscription}>
             <div className="form-group">
               <label className='labelConnexion' htmlFor="nom">Nom :</label>
               <input className='InputConnexion' type="text" id="nom" name="nom" value={nom}

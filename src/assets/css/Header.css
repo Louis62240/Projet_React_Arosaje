@@ -4,6 +4,8 @@
   color: black;
   position: relative;
   cursor:pointer;
+  padding-left:20px;
+  padding-right:20px;
 }
 .NavMenuLink::after {
     content: "";
@@ -57,4 +59,22 @@
   
   
   
-  
+  .PlacementUser
+  {
+    margin-left: auto;
+    display: flex;
+  }
+  .displayFlexAttributes
+  {
+    display: flex;
+  }
+  .PlacementElementUser
+  {
+    margin-top: auto;
+    margin-bottom:auto;
+    padding:10px;
+  }
+  .PlacementMenu 
+  {
+    margin-left: auto;
+  }

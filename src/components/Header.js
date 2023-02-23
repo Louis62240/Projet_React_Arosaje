@@ -38,17 +38,17 @@ const Header = ({ onDisconnect }) => {
         integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
         crossorigin="anonymous"
       />
-      <Navbar style={{ backgroundColor: "rgb(157 236 190)" }} light expand="md">
-        <Container className="d-flex align-items-center m-0 ">
+      <div style={{ backgroundColor: "rgb(157 236 190)" }} light expand="md">
+        <div className='displayFlexAttributes'>
           <img
             src={require("../assets/img/logo.png")}
             alt="Logo"
             className="logo"
             height={100}
           />
-          <Nav className="d-flex align-items-center">
-            <NavItem>
-              <NavLink
+          <div className="PlacementMenu d-flex align-items-center">
+            <div>
+              <div
                 className="NavMenuLink"
                 onClick={() => {
                   setShowAccueil(true);
@@ -57,10 +57,10 @@ const Header = ({ onDisconnect }) => {
                 }}
               >
                 Accueil
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
+              </div>
+            </div>
+            <div>
+              <div
                 className="NavMenuLink"
                 onClick={() => {
                   setShowAccueil(false);
@@ -69,16 +69,16 @@ const Header = ({ onDisconnect }) => {
                 }}
               >
                 Vos Plantes
-              </NavLink>
-            </NavItem>
-          </Nav>
-          <NavbarText>
+              </div>
+            </div>
+          </div>
+          <div className='PlacementUser'>
             <i onClick={() => {
                   setShowAccueil(false);
                   setShowVosPlantes(false);
                   setShowProfil(true);
                 }}
-              className="fas fa-user fa-2x"
+              className="PlacementElementUser fas fa-user fa-2x"
               style={{ cursor: "pointer" }}
               onMouseEnter={(e) => {
                 e.target.style.transform = "scale(1.2)";
@@ -89,19 +89,17 @@ const Header = ({ onDisconnect }) => {
                 e.target.style.transform = "0.5s";
               }}
             ></i>
-          </NavbarText>
-          <a onClick={onDisconnect}><img src={require("../assets/img/sign-out.png")}
+          <a className='PlacementElementUser' onClick={onDisconnect}><img src={require("../assets/img/sign-out.png")}
             alt="Logo"
             className="logo"
             height={50}/></a>
-          <i className="fa fa-sign-out fa-2x" aria-hidden="true"></i>
-          <NavbarText>
+          <div>
             <i onClick={() => {
                   setShowAccueil(false);
                   setShowVosPlantes(false);
                   setShowProfil(true);
                 }}
-              className="fas fa-sign-out fa-2x"
+              className="PlacementElementUser fas fa-sign-out fa-2x"
               style={{ cursor: "pointer" }}
               onMouseEnter={(e) => {
                 e.target.style.transform = "scale(1.2)";
@@ -112,9 +110,10 @@ const Header = ({ onDisconnect }) => {
                 e.target.style.transform = "0.5s";
               }}
             ></i>
-          </NavbarText>
-        </Container>
-      </Navbar>
+          </div>
+          </div>
+        </div>
+      </div>
       <CSSTransition
         in={showAccueil}
         timeout={300}
