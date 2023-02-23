@@ -93,6 +93,19 @@ async def connexion(email: str, mot_de_passe: str):
     else:
         return {"connexion": False}
 
+# route test pour la connexion
+@app.get("/connexiontest")
+async def connexion(email: str):
+    # Récupération de l'utilisateur correspondant à l'email donné
+    c.execute("SELECT email, mot_de_passe FROM utilisateurs WHERE email=?", (email,))
+    result = c.fetchone()
+
+    if result is not None :
+        return {"email": result[0], "mot_de_passe": result[1]}
+    else:
+        return {"connexion": False, "message": "Identifiants incorrects"}
+
+
 #liste toutes les plantes
 @app.get("/plantes")
 async def get_plantes():
@@ -179,13 +192,41 @@ async def get_utilisateurs():
     return utilisateurs
 
 #donne l'id de l'utilisateur selon son nom
-@app.get("/utilisateur/{nom}")
+@app.get("/utilisateur/nom/{nom}")
 async def get_id_utilisateur_by_nom(nom: str):
     c.execute("SELECT id_utilisateurs FROM utilisateurs WHERE LOWER(nom) = LOWER(?)", (nom,))
     id_utilisateur = c.fetchone()
     if id_utilisateur is None:
         raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
     return {"id_utilisateur": id_utilisateur[0]}
+
+#donne tout de l'utilisateur selon son id
+@app.get("/utilisateur/id/{id_utilisateur}")
+async def get_utilisateur(id_utilisateur: int):
+    # Récupération des informations de l'utilisateur
+    c.execute("SELECT * FROM utilisateurs WHERE id_utilisateurs=?", (id_utilisateur, ))
+    utilisateur = c.fetchone()
+
+    if utilisateur is not None:
+        # Récupération des plantes de l'utilisateur en tant que propriétaire
+        c.execute("SELECT * FROM plantes WHERE proprietaire_id=?", (id_utilisateur, ))
+        plantes_proprietaire = c.fetchall()
+
+        # Récupération des plantes de l'utilisateur en tant que gardien
+        c.execute("SELECT * FROM plantes WHERE gardiens_id=?", (id_utilisateur, ))
+        plantes_gardien = c.fetchall()
+
+        # Construction de la réponse
+        reponse = {
+            "utilisateur": utilisateur,
+            "plantes_proprietaire": plantes_proprietaire,
+            "plantes_gardien": plantes_gardien
+        }
+
+        return reponse
+    else:
+        return {"erreur": "Utilisateur non trouvé"}
+
 
 #Met à jour le gardien de la plante
 @app.put("/plante/{id_plante}/gardien")
@@ -222,3 +263,13 @@ async def delete_plante(id_plante: int):
     conn.commit()
 
     return {"status": "success"}
+
+#supprime un utilisateur et ce qui lui est assoscié
+@app.delete("/utilisateur/{id_utilisateur}")
+async def delete_utilisateur(id_utilisateur: int):
+    # Suppression de l'utilisateur
+    c.execute("DELETE FROM utilisateurs WHERE id_utilisateurs=?", (id_utilisateur,))
+    # Suppression des plantes associées
+    c.execute("DELETE FROM plantes WHERE proprietaire_id=?", (id_utilisateur,))
+    conn.commit()
+    return {"message": f"Utilisateur avec l'id {id_utilisateur} supprimé avec succès, ainsi que toutes ses plantes associées."}
