@@ -137,6 +137,39 @@ async def get_plantes():
     return response
 
 
+#liste de toutes les plantes pas gardées
+@app.get("/plantes/sansGardien")
+async def get_plantes():
+    c.execute("""
+        SELECT 
+            plantes.*,
+            plante_photos.photo_url,
+            GROUP_CONCAT(conseil_plante.conseil, '; ') as conseils
+        FROM 
+            plantes
+            LEFT JOIN plante_photos ON plantes.id_plantes = plante_photos.id_plantes
+            LEFT JOIN conseil_plante ON plantes.id_plantes = conseil_plante.id_plantes
+        WHERE plantes.gardiens_id IS NULL
+        GROUP BY plantes.id_plantes;
+    """)
+    plantes = c.fetchall()
+    response = []
+    for plante in plantes:
+        plante_dict = {
+            "id_plante": plante[0],
+            "proprietaire_id": plante[1],
+            "gardiens_id": plante[2],
+            "nom_plante": plante[3],
+            "description_plante": plante[4],
+            "localisation": plante[5],
+            "photo_url": plante[6],
+            "conseils": plante[7]
+        }
+        response.append(plante_dict)
+    return response
+
+
+
 @app.get("/plante/{id_plante}")
 async def get_plante_info(id_plante: int):
     # Récupération de l'information sur la plante
