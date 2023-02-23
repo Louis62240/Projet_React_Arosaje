@@ -4,11 +4,10 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import sqlite3worker
 from fastapi.middleware.cors import CORSMiddleware
-
+from typing import Optional
 
 conn = sq.connect("arosa_je.db")
 c = conn.cursor()
-
 
 if conn:
     print("---------------------------------")
@@ -79,7 +78,6 @@ async def add_article(nom : str, mot_de_passe : str, telephone: int, email: str)
         print("Error: ", e)
         raise HTTPException(status_code=409, detail="Utilisateur existe déjà")
 
-
 # route pour la connexion
 @app.get("/connexion")
 async def connexion(email: str, mot_de_passe: str):
@@ -104,7 +102,6 @@ async def connexion(email: str):
         return {"email": result[0], "mot_de_passe": result[1]}
     else:
         return {"connexion": False, "message": "Identifiants incorrects"}
-
 
 #liste toutes les plantes
 @app.get("/plantes")
@@ -135,7 +132,6 @@ async def get_plantes():
         }
         response.append(plante_dict)
     return response
-
 
 #liste de toutes les plantes pas gardées
 @app.get("/plantes/sansGardien")
@@ -168,8 +164,7 @@ async def get_plantes():
         response.append(plante_dict)
     return response
 
-
-
+#liste toutes les infos de la plante par son id
 @app.get("/plante/{id_plante}")
 async def get_plante_info(id_plante: int):
     # Récupération de l'information sur la plante
@@ -186,26 +181,29 @@ async def get_plante_info(id_plante: int):
         raise HTTPException(status_code=404, detail="Le propriétaire n'a pas été trouvé.")
     nom_proprietaire = result[0]
     
-    # Récupération du nom du gardien
-    c.execute("SELECT nom FROM utilisateurs WHERE id_utilisateurs = ?", (gardiens_id,))
-    result = c.fetchone()
-    if result is None:
-        raise HTTPException(status_code=404, detail="Le gardien n'a pas été trouvé.")
-    nom_gardien = result[0]
+    # Récupération du nom du gardien s'il y en a un
+    nom_gardien = ""
+    if gardiens_id is not None:
+        c.execute("SELECT nom FROM utilisateurs WHERE id_utilisateurs = ?", (gardiens_id,))
+        result = c.fetchone()
+        if result is not None:
+            nom_gardien = result[0]
     
     # Récupération de l'URL de la photo de la plante
     c.execute("SELECT photo_url FROM plante_photos WHERE id_plantes = ?", (id_plante,))
     result = c.fetchone()
-    if result is None:
-        raise HTTPException(status_code=404, detail="La photo n'a pas été trouvée.")
-    photo_url = result[0]
-    
+    if result:
+        photo_url = result[0]
+    else:
+        photo_url = ""
+
     # Récupération du conseil associé à la plante
     c.execute("SELECT conseil FROM conseil_plante WHERE id_plantes = ?", (id_plante,))
     result = c.fetchone()
-    if result is None:
-        raise HTTPException(status_code=404, detail="Le conseil n'a pas été trouvé.")
-    conseil = result[0]
+    if result :
+        conseil = result[0]
+    else :
+        conseil = ""
     
     return {
         "nom_proprietaire": nom_proprietaire,
@@ -217,10 +215,11 @@ async def get_plante_info(id_plante: int):
         "conseil": conseil
     }
 
+
 #liste touts les utilisateurs
 @app.get("/utilisateurs")
 async def get_utilisateurs():
-    c.execute("SELECT * FROM utilisateurs;")
+    c.execute("SELECT nom, telephone, email FROM utilisateurs;")
     utilisateurs = c.fetchall()
     return utilisateurs
 
@@ -260,25 +259,20 @@ async def get_utilisateur(id_utilisateur: int):
     else:
         return {"erreur": "Utilisateur non trouvé"}
 
-
 #Met à jour le gardien de la plante
-@app.put("/plante/{id_plante}/gardien")
-async def update_plante_gardien(id_plante: int, nom_gardien: str):
-    try:
-        # Récupérer l'ID du gardien
-        c.execute("SELECT id_utilisateurs FROM utilisateurs WHERE nom=?", (nom_gardien,))
-        gardien = c.fetchone()
-        if gardien is None:
-            raise HTTPException(status_code=404, detail="Gardien non trouvé")
-        gardien_id = gardien[0]
+@app.put("/plante/gardien/{id_plante}")
+async def update_plante_gardien(id_plante: int, gardiens_id: Optional[str] = None):
+    # Vérifier si la plante existe dans la base de données
+    c.execute("SELECT * FROM plantes WHERE id_plantes=?", (id_plante,))
+    plante = c.fetchone()
+    if not plante:
+        raise HTTPException(status_code=404, detail="La plante n'a pas été trouvée.")
+    
+    # Mettre à jour le gardien de la plante avec l'ID fourni
+    c.execute("UPDATE plantes SET gardiens_id=? WHERE id_plantes=?", (gardiens_id, id_plante))
+    conn.commit()
+    return {"status": "success"}
 
-        # Mettre à jour la plante avec l'ID du gardien
-        c.execute("UPDATE plantes SET gardiens_id=? WHERE id_plantes=?", (gardien_id, id_plante))
-        conn.commit()
-        return {"status": "success"}
-    except Exception as e:
-        print("Error: ", e)
-        raise HTTPException(status_code=404, detail="Plante non trouvée")
 
 #supprime une plante et ce qui lui est assoscié
 @app.delete("/plante/{id_plante}")
