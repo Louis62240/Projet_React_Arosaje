@@ -28,11 +28,14 @@ border: solid 2px rgb(55 182 108);
 }
 .PlanteBrique
 {
-    display:flex;
+    display: flex;
+flex-wrap: wrap;
+justify-content: space-between;
 }
 .PlanteBriqueInside
 {
-    margin:1%;
+    margin-bottom: 20px;
+flex-basis: calc(20% - 20px); /* 20% width with a 20px margin between each element */
 }
 .buttonEnSavoirPlus
 {

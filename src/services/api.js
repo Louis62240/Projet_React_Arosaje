@@ -1,4 +1,5 @@
 import axios from 'axios';
+import bcrypt from 'bcryptjs';
 
 const getPlantes = () => {
   return axios.get("http://127.0.0.1:8000/plantes", {
@@ -30,16 +31,10 @@ const getPlanteById = (id) => {
     console.log(error);
   });
 };
-const addPlante = async (proprietaireId, nomPlante, descriptionPlante, localisation, gardiensId) => {
-  const data = {
-    proprietaire_id: proprietaireId,
-    nom_plante: nomPlante,
-    description_plante: descriptionPlante,
-    localisation: localisation,
-    gardiens_id: gardiensId || null,
-  };
+const addPlante = async (proprietaire_id, nom_plante, description_plante, localisation) => {
+  const url = `http://127.0.0.1:8000/plante?proprietaire_id=${proprietaire_id}&nom_plante=${nom_plante}&description_plante=${description_plante}&localisation=${localisation}`;
   try {
-    const response = await axios.post("http://127.0.0.1:8000/plante", data, {
+    const response = await axios.post(url, {
       headers: {
         'Access-Control-Allow-Origin': 'http://localhost:3000',
         'Content-Type': 'application/json'

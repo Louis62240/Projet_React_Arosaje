@@ -7,33 +7,6 @@ import "../assets/css/Accueil.css";
 import {getPlantes,getPlanteById} from '../services/api'
 
 const Home = () => {
-  const Plante = [
-    {
-      name: "Tulipe",
-      description: "A arroser tous les 2 jours",
-      Localisation: "Lille",
-    },
-    {
-      name: "Cactus",
-      description: "A arroser tous les 4 jours",
-      Localisation: "Lille",
-    },
-    {
-      name: "Tulipe",
-      description: "A arroser tous les jours",
-      Localisation: "Quesques",
-    },
-    {
-      name: "Orchidée",
-      description: "A arroser tous les jours",
-      Localisation: "Lille",
-    },
-    {
-      name: "Marguerite",
-      description: "A arroser tous les 2 jours",
-      Localisation: "Roubaix", 
-    },
-  ];
   const [plantes, setPlantes] = useState([]);
   useEffect(() => {
     getPlantes().then(data => {
@@ -123,15 +96,15 @@ const Home = () => {
         alt="..."
       />
       <div className="card-body">
-        <h5 className="card-title">{plante[3]}</h5>
+        <h5 className="card-title">{plante.nom_plante}</h5>
         <p className="positionLocalisation">
           <img
             src={require("../assets/img/localisation.png")}
             className="imgLocalisation"
           />
-          {plante[5]}
+          {plante.localisation}
         </p>
-        <p className="card-text">{plante[4]}</p>
+        <p className="card-text">Description : {plante.description_plante}</p>
         <button
           className="buttonEnSavoirPlus btn btn-primary"
           data-toggle="modal"

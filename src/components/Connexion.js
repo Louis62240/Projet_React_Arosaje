@@ -38,6 +38,7 @@ function Connexion({ onConnect }) {
     try {
       const result = await addUser(nom, motDePasse, telephone, email);
       console.log(result);
+      alert('Inscription réussie !');
       // Ajouter ici le code pour rediriger vers une autre page ou afficher un message de confirmation
     } catch (error) {
       setError(error.message);
@@ -50,7 +51,7 @@ function Connexion({ onConnect }) {
 
   return (
     <div className='PlacementCard'>
-      <div className="card">
+      <div className="cardConnexion">
         <img
           src={require("../assets/img/logo.png")}
           alt="Logo"
