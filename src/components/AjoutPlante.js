@@ -6,6 +6,7 @@ const AjoutPlante = () => {
   const [proprietaireId, setProprietaireId] = useState("");
   const [nomPlante, setNomPlante] = useState("");
   const [descriptionPlante, setDescriptionPlante] = useState("");
+  const [conseilPlante, setConseilPlante] = useState("");
   const [localisation, setLocalisation] = useState("");
   const [afficherDeuxiemeFormulaire, setAfficherDeuxiemeFormulaire] = useState(false);
   const [afficherTroisiemeFormulaire, setAfficherTroisiemeFormulaire] = useState(false);
@@ -82,6 +83,8 @@ const AjoutPlante = () => {
       );
       alert("Photo ajoutée avec succès");
       setAfficherTroisiemeFormulaire(true);
+      setAfficherDeuxiemeFormulaire(true);
+      console.log(afficherDeuxiemeFormulaire + " " + afficherTroisiemeFormulaire)
       console.log(response); // affiche les données dans la console
 
 
@@ -91,9 +94,13 @@ const AjoutPlante = () => {
   };
   const handleSubmit3 = async (event) => {
     event.preventDefault();
-    // Code pour envoyer le fichier vers le serveur
+    
     try {
-      
+      const response = await addConseil(
+        idPlante,
+        conseilPlante
+      );
+        alert("Conseil ajouté avec succès");
     } catch (error) {
       console.log(error);
     }
@@ -191,25 +198,16 @@ const AjoutPlante = () => {
  <>      <div className="add-image-container">
        <form onSubmit={handleSubmit3}>
          <div className="form-group">
-           <label htmlFor="conseil" className="custom-file-upload">
-             Conseil
-           </label>
-           <input 
-             id="file-upload"
-             type="file"
-             onChange={handleFileChange}
-             accept="image/*"
-           />
-         </div>
-         <div className="preview-image-container">
-         {selectedFile && (
-           <img
-             className="preview-image"
-             src={URL.createObjectURL(selectedFile)}
-             alt="Prévisualisation"
-           />
-         )}
-       </div>
+         <div>
+          <label className='labelAjout' htmlFor="conseilPlante">Conseil pour la plante:</label>
+          <input className='InputAjout'
+            type="textarea"
+            id="conseilPlante"
+            value={conseilPlante}
+            onChange={(event) => setConseilPlante(event.target.value)}
+          />
+        </div>
+        </div>
        <div className="PlacementButton">
          <button className="buttonAddPlante" type="submit">Envoyer</button>
        </div>
