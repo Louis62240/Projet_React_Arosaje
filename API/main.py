@@ -93,14 +93,15 @@ async def add_article(nom : str, mot_de_passe : str, telephone: int, email: str)
 @app.get("/connexion")
 async def connexion(email: str, mot_de_passe: str):
     # Récupération de l'utilisateur correspondant à l'email donné
-    c.execute("SELECT mot_de_passe FROM utilisateurs WHERE email=?", (email, ))
+    c.execute("SELECT id_utilisateurs, mot_de_passe FROM utilisateurs WHERE email=?", (email, ))
     result = c.fetchone()
 
     # Vérification du mot de passe
-    if result is not None and (mot_de_passe == result[0]):
-        return {"connexion": True}
+    if result is not None and (mot_de_passe == result[1]):
+        return {"connexion": True, "id_utilisateur": result[0]}
     else:
         return {"connexion": False}
+
 
 # route test pour la connexion
 @app.get("/connexiontest")
