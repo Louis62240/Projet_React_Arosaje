@@ -159,7 +159,7 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
           />
         </div>
         <div>
-          <label className='labelAjout' htmlFor="localisation">Localisation:</label>
+          <label className='labelAjout' htmlFor="localisation" value={localisation} onChange={(event) => setLocalisation(event.target.value)} >Localisation:</label>
           <input className='InputAjout'
             type="text"
             id="localisation"

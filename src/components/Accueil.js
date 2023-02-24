@@ -27,22 +27,38 @@ const Accueil = ({setShowAccueil,setShowProfil,setShowVosPlantes}) => {
   const [PlanteProprietaire, setPlanteProprietaire] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
+  const [ville, setVille] = useState("");
+
+  const [mapURL, setMapURL] = useState("");
+
 
     const recupDataPlante = (plante) => {
-      console.log("proutprout :");
-      console.log(plante);
       // plante est un tableau contenant les informations de la plante
       const id = plante.id_plante;
       getPlanteById(id)
         .then((data) => {
           // Mettre à jour les variables d'état avec les informations de la plante sélectionnée
-          console.log(data);
           setPlanteNameSelected(data.nom_plante);
           setPlanteDescriptionSelected(data.localisation);
           setPlanteLocalisationSelected(data.description_plante);
           setPlanteConseilSelected(data.conseil);
           setPlanteProprietaire(data.nom_proprietaire);
+          setVille(data.localisation);
           handleShow();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
+    const recupLocalisation = (plante) => {
+      // plante est un tableau contenant les informations de la plante
+      const id = plante.id_plante;
+      getPlanteById(id)
+        .then((data) => {
+          // Mettre à jour les variables d'état avec les informations de la plante sélectionnée
+          setVille(data.localisation);
+          mapShow();
         })
         .catch((error) => {
           console.log(error);
@@ -58,14 +74,43 @@ const Accueil = ({setShowAccueil,setShowProfil,setShowVosPlantes}) => {
     // Handle form submission
   };
 
+  const handleGetLocation = (ville, plante) => {
+
+    ville = ville.toLowerCase();
+
+    /*const apiKey = '506c483206104e4eb57141fd064060a6';
+    const url = `https://api.opencagedata.com/geocode/v1/json?q=${ville}&key=${apiKey}&language=fr&pretty=1`;
+
+    console.log("URL :");
+    console.log(url);
+  
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        const { lat, lng } = data.results[0].geometry;
+      })
+      .catch((error) => {
+        console.error(error);
+      });*/
+
+    setMapURL(`https://maps.google.com/maps?q=${ville}&t=&z=13&ie=UTF8&iwloc=&output=embed`);
+
+    recupLocalisation(plante);
+  };
+
+  const [active, setActive] = useState(false);
   const [show, setShow] = useState(false);
   const [city, setCity] = useState("");
 
+  const mapClose = () => setActive(false);
+  const mapShow = () => setActive(true);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const filteredPlantes = plantes.filter(
+
+
     (plante) =>
       plante.nom_plante.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -109,13 +154,13 @@ const Accueil = ({setShowAccueil,setShowProfil,setShowVosPlantes}) => {
 />
       <div className="card-body">
         <h5 className="card-title">{plante.nom_plante}</h5>
-        <p className="positionLocalisation">
-          <img
-            src={require("../assets/img/localisation.png")}
-            className="imgLocalisation"
-          />
-          {plante.localisation}
-        </p>
+          <button className="positionLocalisation" data-toggle="modal" onClick={() => {handleGetLocation(ville, plante);}}>
+            <img
+              src={require("../assets/img/localisation.png")}
+              className="imgLocalisation"
+            />
+            {plante.localisation}
+          </button>
         <p className="card-text">Description : {plante.description_plante}</p>
         <button
           className="buttonEnSavoirPlus btn btn-primary"
@@ -131,6 +176,7 @@ const Accueil = ({setShowAccueil,setShowProfil,setShowVosPlantes}) => {
     </div>
   ))}
 </div>
+          {/* Affiche un pop up avec les informations sur la plante */}
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
               <Modal.Title>{PlanteNameSelected}</Modal.Title>
@@ -150,10 +196,39 @@ const Accueil = ({setShowAccueil,setShowProfil,setShowVosPlantes}) => {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose}>
-                Close
+                Fermer
               </Button>
               <Button variant="primary" onClick={handleClose}>
-                Save Changes
+                Appliquer les modifications
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          {/*Affiche un pop up avec les informations sur la localisation */}
+          <Modal show={active} onHide={mapClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>{ville}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              Localisation : {ville}
+              <br />
+              <div className="map-container" onChange={(event) => setMapURL(event.target.value)}>
+                {mapURL ? (
+                  <iframe
+                    width="100%"
+                    height="300px"
+                    src={mapURL}
+                    title="Ville Map"
+                    onChange={(event) => setMapURL(event.target.value)}
+                  />
+                ) : (
+                  <p>Loading...</p>
+                )}
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={mapClose}>
+                Fermer
               </Button>
             </Modal.Footer>
           </Modal>
