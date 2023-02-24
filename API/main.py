@@ -81,26 +81,23 @@ async def add_photo(plante_photo : Plante_photo):
 #ajoute un utilisateur
 @app.post("/utilisateur")
 async def add_article(nom : str, mot_de_passe : str, telephone: int, email: str):
-    try:
-        c.execute("INSERT INTO utilisateurs (nom, mot_de_passe, telephone, email) VALUES (?, ?, ?, ?)", (nom, mot_de_passe, telephone, email))
-        conn.commit()
-        return {"status": "success", "id": c.lastrowid}
-    except Exception as e:
-        print("Error: ", e)
-        raise HTTPException(status_code=409, detail="Utilisateur existe déjà")
+    c.execute("INSERT INTO utilisateurs (nom, mot_de_passe, telephone, email) VALUES (?, ?, ?, ?)", (nom, mot_de_passe, telephone, email))
+    conn.commit()
+    return {"status": "success", "id": c.lastrowid}
 
 # route pour la connexion
 @app.get("/connexion")
 async def connexion(email: str, mot_de_passe: str):
     # Récupération de l'utilisateur correspondant à l'email donné
-    c.execute("SELECT mot_de_passe FROM utilisateurs WHERE email=?", (email, ))
+    c.execute("SELECT id_utilisateurs, mot_de_passe FROM utilisateurs WHERE email=?", (email, ))
     result = c.fetchone()
 
     # Vérification du mot de passe
-    if result is not None and (mot_de_passe == result[0]):
-        return {"connexion": True}
+    if result is not None and (mot_de_passe == result[1]):
+        return {"connexion": True, "id_utilisateur": result[0]}
     else:
         return {"connexion": False}
+
 
 # route test pour la connexion
 @app.get("/connexiontest")
@@ -312,3 +309,25 @@ async def delete_utilisateur(id_utilisateur: int):
     c.execute("DELETE FROM plantes WHERE proprietaire_id=?", (id_utilisateur,))
     conn.commit()
     return {"message": f"Utilisateur avec l'id {id_utilisateur} supprimé avec succès, ainsi que toutes ses plantes associées."}
+
+#modifier un utilisateur selon son id
+@app.put("/utilisateur/{id_utilisateur}")
+async def update_utilisateur(id_utilisateur: int, nom: str = None, mot_de_passe: str = None, telephone: int = None, email: str = None):
+    # Vérification que l'utilisateur existe
+    c.execute("SELECT * FROM utilisateurs WHERE id_utilisateurs=?", (id_utilisateur,))
+    result = c.fetchone()
+    if result is None:
+        return {"status": "error", "message": "L'utilisateur avec cet ID n'existe pas."}
+
+    # Mise à jour des informations de l'utilisateur
+    if nom is not None:
+        c.execute("UPDATE utilisateurs SET nom=? WHERE id_utilisateurs=?", (nom, id_utilisateur))
+    if mot_de_passe is not None:
+        c.execute("UPDATE utilisateurs SET mot_de_passe=? WHERE id_utilisateurs=?", (mot_de_passe, id_utilisateur))
+    if telephone is not None:
+        c.execute("UPDATE utilisateurs SET telephone=? WHERE id_utilisateurs=?", (telephone, id_utilisateur))
+    if email is not None:
+        c.execute("UPDATE utilisateurs SET email=? WHERE id_utilisateurs=?", (email, id_utilisateur))
+
+    conn.commit()
+    return {"status": "success", "id_utilisateur": id_utilisateur}
