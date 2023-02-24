@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { addPlante , addPhoto} from "../services/api";
 import "../assets/css/AjouterPlante.css";
+import PrendrePhoto from "../components/PrendrePhoto.js";
 
 const AjoutPlante = () => {
   const [proprietaireId, setProprietaireId] = useState("");
@@ -185,6 +186,9 @@ const AjoutPlante = () => {
       </div>
       )}
       {afficherTroisiemeFormulaire && (
+        <>
+        <PrendrePhoto></PrendrePhoto>
+        
        <div className="add-image-container">
        <form onSubmit={handleSubmit3}>
          <div className="form-group">
@@ -212,7 +216,8 @@ const AjoutPlante = () => {
        </div>
        </form>
       
-     </div> 
+     </div>
+     </> 
       )}
     </div></>
   );
