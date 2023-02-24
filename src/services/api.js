@@ -139,7 +139,7 @@ export const getUserId = async (id_utilisateur) => {
     const response = await axios.get(url);
     console.log("userID");
     console.log(response.data); // affiche l'id de l'utilisateur dans la console
-    return response.data.id_utilisateur; // retourne l'id de l'utilisateur
+    return response.data; // retourne l'id de l'utilisateur
   } catch (error) {
     console.log(error);
   }
