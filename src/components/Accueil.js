@@ -29,8 +29,10 @@ const Home = ({setShowAccueil}) => {
 
 
     const recupDataPlante = (plante) => {
+      console.log("proutprout :");
+      console.log(plante);
       // plante est un tableau contenant les informations de la plante
-      const id = plante[0];
+      const id = plante.id_plante;
       getPlanteById(id)
         .then((data) => {
           // Mettre à jour les variables d'état avec les informations de la plante sélectionnée
