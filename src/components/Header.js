@@ -8,7 +8,6 @@ import {
   Container,
   NavbarText,
 } from "reactstrap";
-import { CSSTransition } from "react-transition-group";
 import Accueil from "./Accueil.js";
 import VosPlantes from "./VosPlantes.js";
 import Profil from "./Profil.js";

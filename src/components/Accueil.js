@@ -25,6 +25,8 @@ const Home = () => {
     useState("");
   const [PlanteConseilSelected, setPlanteConseilSelected] = useState("");
   const [PlanteProprietaire, setPlanteProprietaire] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+
 
     const recupDataPlante = (plante) => {
       // plante est un tableau contenant les informations de la plante
@@ -59,6 +61,11 @@ const Home = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const filteredPlantes = plantes.filter(
+    (plante) =>
+      plante.nom_plante.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const [isVisible, setIsVisible] = useState(false);
 
   const handleClick = () => {
@@ -70,12 +77,14 @@ const Home = () => {
         <div className="SearchBarDiv">
           <p className="texteStatut">Statut : Propriétaire</p>
           <form class="SearchBar form-inline my-2 my-lg-0">
-            <input
-              class="form-control mr-sm-2"
-              type="search"
-              placeholder="Rechercher"
-              aria-label="Rechercher"
-            />
+          <input
+            class="form-control mr-sm-2"
+            type="search"
+            placeholder="Rechercher"
+            aria-label="Rechercher"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
               Rechercher
             </button>
@@ -88,7 +97,7 @@ const Home = () => {
         </div>
         <div>
         <div className="PlanteBrique">
-  {plantes.map((plante) => (
+  {filteredPlantes.map((plante) => (
     <div className="PlanteBriqueInside card" style={{ width: "18rem" }}>
       <img
         src={require("../assets/img/plante.jpg")}

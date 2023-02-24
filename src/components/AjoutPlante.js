@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { addPlante , addPhoto} from "../services/api";
 import "../assets/css/AjouterPlante.css";
-import { Alert } from 'reactstrap';
 
 const AjoutPlante = () => {
   const [proprietaireId, setProprietaireId] = useState("");
