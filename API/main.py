@@ -1,10 +1,16 @@
 from typing import Union
 import sqlite3 as sq
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, status
 from pydantic import BaseModel
 import sqlite3worker
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
+from dataclasses import dataclass
+
+@dataclass
+class Plante_photo :
+    id_plantes: int
+    photo_url : str
 
 conn = sq.connect("arosa_je.db")
 c = conn.cursor()
@@ -42,9 +48,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.get("/")
+async def root():
+    return {"message": "requête succès"}
+
 #ajoute une plante
 @app.post("/plante")
-async def add_article(proprietaire_id: int, nom_plante: str, description_plante: str, localisation: str, *, gardiens_id: int = None):
+async def add_plante(proprietaire_id: int, nom_plante: str, description_plante: str, localisation: str, *, gardiens_id: int = None):
     c.execute("INSERT INTO plantes (proprietaire_id, nom_plante, description_plante, localisation, gardiens_id) VALUES (?, ?, ?, ?, ?)", (proprietaire_id, nom_plante, description_plante, localisation, gardiens_id))
     conn.commit()
     return {"status": "success", "id": c.lastrowid}
@@ -59,13 +70,13 @@ async def add_conseil( conseil: str, id_plante : int):
     return f"Le conseil a été ajouté à la plante avec l'id {id_plante}."
 
 # ajouter une photo à une plante
-@app.post('/photo/{id_plante}')
-async def add_photo( photo_url: str, id_plante : int):
-    
+@app.post('/photo/')
+async def add_photo(plante_photo : Plante_photo):
+    print(plante_photo)
     # Ajout de la photo dans la table plante_photos
-    c.execute("INSERT INTO plante_photos (id_plantes, photo_url) VALUES (?, ?)", (id_plante, photo_url))
+    c.execute("INSERT INTO plante_photos (id_plantes, photo_url) VALUES (?, ?)", (plante_photo.id_plantes, plante_photo.photo_url))
     conn.commit()
-    return f"La photo a été ajouté à la plante avec l'id {id_plante}."
+    return f"La photo a été ajouté à la plante avec l'id {plante_photo.id_plantes}."
 
 #ajoute un utilisateur
 @app.post("/utilisateur")
@@ -221,7 +232,8 @@ async def get_plante_info(id_plante: int):
 async def get_utilisateurs():
     c.execute("SELECT nom, telephone, email FROM utilisateurs;")
     utilisateurs = c.fetchall()
-    return utilisateurs
+    return utilisateurs, status.HTTP_200_OK
+
 
 #donne l'id de l'utilisateur selon son nom
 @app.get("/utilisateur/nom/{nom}")
