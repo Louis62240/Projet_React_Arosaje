@@ -20,7 +20,7 @@ FOREIGN KEY (gardiens_id) REFERENCES utilisateurs(id_utilisateurs)
 CREATE TABLE plante_photos (
 id_plante_photos INTEGER PRIMARY KEY AUTOINCREMENT,
 id_plantes INT,
-photo_url VARCHAR(255),
+photo_url TEXT,
 FOREIGN KEY (id_plantes) REFERENCES plantes(id_plantes)
 );
 
