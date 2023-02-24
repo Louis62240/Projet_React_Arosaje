@@ -67,7 +67,7 @@ async def add_conseil( conseil: str, id_plante : int):
     # Ajout du conseil dans la table conseil_plante
     c.execute("INSERT INTO conseil_plante (id_plantes, conseil) VALUES (?, ?)", (id_plante, conseil))
     conn.commit()
-    return f"Le conseil a été ajouté à la plante avec l'id {id_plante}."
+    return "conseil a été ajouté à la plante"
 
 # ajouter une photo à une plante
 @app.post('/photo/')
@@ -76,7 +76,7 @@ async def add_photo(plante_photo : Plante_photo):
     # Ajout de la photo dans la table plante_photos
     c.execute("INSERT INTO plante_photos (id_plantes, photo_url) VALUES (?, ?)", (plante_photo.id_plantes, plante_photo.photo_url))
     conn.commit()
-    return f"La photo a été ajouté à la plante avec l'id {plante_photo.id_plantes}."
+    return "La photo a été ajoutée à la plante"
 
 #ajoute un utilisateur
 @app.post("/utilisateur")
