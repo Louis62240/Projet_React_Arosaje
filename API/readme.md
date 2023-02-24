@@ -8,7 +8,7 @@ cd .\venv\Scripts\
 
 cd ../..
 
-pip install sqlite3worker, pydantic, fastapi, "uvicorn[standart]"
+pip install -r .\requirements.txt
 
 uvicorn main:app --reload --port 8000
 ```
@@ -77,3 +77,4 @@ DELETE http://127.0.0.1:8000/plante/5
 DELETE http://127.0.0.1:8000/utilisateur/10
 
 ```
+
