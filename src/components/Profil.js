@@ -1,6 +1,10 @@
 import React from "react";
 import "../assets/css/Profil.css";
+import { getUserId } from "../services/api";
 const Profil = () => {
+
+    getUserId(1);
+
     return (
         <>
             <div class="container rounded bg-white mt-5 mb-5">

@@ -133,6 +133,18 @@ const addUser = async (nom, mot_de_passe, telephone, email) => {
   }
 };
 
+export const getUserId = async (id_utilisateur) => {
+  const url = `http://127.0.0.1:8000/utilisateur/id/${id_utilisateur}`;
+  try {
+    const response = await axios.get(url);
+    console.log("userID");
+    console.log(response.data); // affiche l'id de l'utilisateur dans la console
+    return response.data.id_utilisateur; // retourne l'id de l'utilisateur
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
 
 
