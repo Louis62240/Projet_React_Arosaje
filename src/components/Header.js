@@ -1,13 +1,5 @@
 import React, { useState } from "react";
 import "../assets/css/Header.css";
-import {
-  Navbar,
-  Nav,
-  NavItem,
-  NavLink,
-  Container,
-  NavbarText,
-} from "reactstrap";
 import Accueil from "./Accueil.js";
 import VosPlantes from "./VosPlantes.js";
 import Profil from "./Profil.js";
@@ -16,10 +8,6 @@ const Header = ({ onDisconnect}) => {
   const [showAccueil, setShowAccueil] = useState(true);
   const [showVosPlantes, setShowVosPlantes] = useState(false);
   const [showProfil, setShowProfil] = useState(false);
-
-  const handleClickAccueil = () => {
-    setShowAccueil(true);
-  };
 
   useState(() => {
     setShowAccueil(true);
@@ -125,7 +113,7 @@ const Header = ({ onDisconnect}) => {
             </div>
           </div>
         </div>
-        <Accueil setShowAccueil={setShowAccueil} />
+        <Accueil setShowAccueil={setShowAccueil} setShowProfil={setShowProfil} setShowVosPlantes={setShowVosPlantes}/>
       </>
     );
   } else if (showVosPlantes) {
