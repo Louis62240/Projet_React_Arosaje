@@ -31,7 +31,7 @@ const Header = ({ onDisconnect}) => {
           integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
           crossorigin="anonymous"
         />
-        <div style={{ backgroundColor: "mediumseagreen" }} light expand="md">
+        <div className="navbarHeader" light expand="md">
           <div className="displayFlexAttributes">
             <img
               src={require("../assets/img/logo.png")}
@@ -42,7 +42,6 @@ const Header = ({ onDisconnect}) => {
             <div className="PlacementMenu d-flex align-items-center">
               <div>
                 <div
-                  style={{ textDecoration: "underline" }}
                   className="NavMenuLink"
                   onClick={() => {
                     setShowAccueil(true);
