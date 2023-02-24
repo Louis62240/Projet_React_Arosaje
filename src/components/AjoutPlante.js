@@ -9,7 +9,8 @@ const AjoutPlante = () => {
   const [localisation, setLocalisation] = useState("");
   const [afficherDeuxiemeFormulaire, setAfficherDeuxiemeFormulaire] = useState(false);
   const [idPlante, setIdPlante] = useState("");
-
+  const [imageFile, setImageFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
   const handleGetLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
       // Récupère les coordonnées de l'utilisateur
@@ -58,8 +59,16 @@ const AjoutPlante = () => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+    const file = event.target.files[0];
+    setSelectedFile(file);
+};
+
+  const uploadData = (base64String) => {
+    // Code pour envoyer la chaîne de caractères base64 au serveur
+    setSelectedFile(base64String);
+
   };
+
 
   const handleSubmit2 = async (event) => {
     event.preventDefault();

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import bcrypt from 'bcryptjs';
 
 const getPlantes = () => {
   return axios.get("http://127.0.0.1:8000/plantes", {
@@ -46,14 +45,21 @@ const addPlante = async (proprietaire_id, nom_plante, description_plante, locali
     console.log(error);
   }
 };
-export const addPhoto = async (photoUrl, idPlante) => {
+export const addPhoto = async (photo, idPlante) => {
   try {
-    console.log(photoUrl);
-    const response = await fetch(`http://127.0.0.1:8000/photo/${idPlante}?photo_url=${photoUrl}`, {
-      method: 'POST'
-    });
-    const data = await response.json();
-    return data;
+    // Convertir l'objet File en une chaîne de caractères en base64
+    const reader = new FileReader();
+    reader.readAsDataURL(photo);
+    reader.onload = async () => {
+      const base64Image = reader.result.split(",")[1];
+      console.log(base64Image);
+      // Envoyer l'image en base64 à l'API
+      const response = await fetch(`http://127.0.0.1:8000/photo/${idPlante}?photo_url=${base64Image}`, {
+        method: 'POST'
+      });
+      const data = await response.json();
+      return data;
+    };
   } catch (error) {
     console.log(error);
   }
