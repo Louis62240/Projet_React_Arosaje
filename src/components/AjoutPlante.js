@@ -3,7 +3,7 @@ import { addPlante , addPhoto, addConseil} from "../services/api";
 import "../assets/css/AjouterPlante.css";
 import PrendrePhoto from "./PrendrePhoto";
 import ProgressBar from "./ProgressBar";
-const AjoutPlante = ({ setShowAccueil }) => {
+const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
   const [proprietaireId, setProprietaireId] = useState("");
   const [nomPlante, setNomPlante] = useState("");
   const [descriptionPlante, setDescriptionPlante] = useState("");
@@ -112,8 +112,11 @@ const AjoutPlante = ({ setShowAccueil }) => {
         idPlante,
         conseilPlante
       );
+      setShowAccueil(true);
+      setShowVosPlantes(false);
+      setShowProfil(false);
         alert("Conseil ajouté avec succès");
-        handleNext();
+        handleClickAfter();
     } catch (error) {
       console.log(error);
     }
@@ -223,7 +226,7 @@ const AjoutPlante = ({ setShowAccueil }) => {
         </div>
         </div>
        <div className="PlacementButton">
-         <button className="buttonAddPlante" onClick={handleClickAfter} type="submit">Envoyer</button>
+         <button className="buttonAddPlante" type="submit">Envoyer</button>
        </div>
        </form>
       
