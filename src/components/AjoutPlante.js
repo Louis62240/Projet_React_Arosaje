@@ -59,9 +59,7 @@ const AjoutPlante = () => {
 
   return (
     <>
-    <Alert color="success">
-    This is a success alert — check it out!
-  </Alert>
+
     <div className='formulaireAjoutPlante'>
       {!afficherDeuxiemeFormulaire && (
       <form onSubmit={handleSubmit}>

@@ -38,7 +38,7 @@ const Header = ({ onDisconnect }) => {
         integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
         crossorigin="anonymous"
       />
-      <div style={{ backgroundColor: "rgb(157 236 190)" }} light expand="md">
+      <div style={{ backgroundColor: "mediumseagreen" }} light expand="md">
         <div className='displayFlexAttributes'>
           <img
             src={require("../assets/img/logo.png")}
@@ -48,7 +48,7 @@ const Header = ({ onDisconnect }) => {
           />
           <div className="PlacementMenu d-flex align-items-center">
             <div>
-              <div
+              <div style={{textDecoration:'underline',}}
                 className="NavMenuLink"
                 onClick={() => {
                   setShowAccueil(true);
@@ -114,14 +114,7 @@ const Header = ({ onDisconnect }) => {
           </div>
         </div>
       </div>
-      <CSSTransition
-        in={showAccueil}
-        timeout={300}
-        classNames="accueil"
-        unmountOnExit
-      >
         <Accueil />
-      </CSSTransition>
     </>
   
   );
@@ -165,7 +158,7 @@ const Header = ({ onDisconnect }) => {
                           </NavLink>
                         </NavItem>
                         <NavItem>
-                          <NavLink
+                          <NavLink style={{textDecoration:'underline'}}
                             className="NavMenuLink"
                             onClick={() => {
                               setShowAccueil(false);
@@ -267,14 +260,7 @@ const Header = ({ onDisconnect }) => {
                       </NavbarText>
                     </Container>
                   </Navbar>
-                  <CSSTransition
-                    in={showProfil}
-                    timeout={300}
-                    classNames="profil"
-                    unmountOnExit
-                  >
                     <Profil />
-                  </CSSTransition>
                 </>
               );
 
