@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { addPlante , addPhoto, addConseil} from "../services/api";
 import "../assets/css/AjouterPlante.css";
 import PrendrePhoto from "./PrendrePhoto";
-const AjoutPlante = () => {
+import ProgressBar from "./ProgressBar";
+const AjoutPlante = ({ setShowAccueil }) => {
   const [proprietaireId, setProprietaireId] = useState("");
   const [nomPlante, setNomPlante] = useState("");
   const [descriptionPlante, setDescriptionPlante] = useState("");
@@ -13,6 +14,15 @@ const AjoutPlante = () => {
   const [idPlante, setIdPlante] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
+
+  const [currentStep, setCurrentStep] = useState(1);
+
+  const handleNext = () => {
+    setCurrentStep(currentStep + 1);
+  };
+  const handleClickAfter = () => {
+    setShowAccueil(true);
+  };
   const handleGetLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
       // Récupère les coordonnées de l'utilisateur
@@ -48,6 +58,7 @@ const AjoutPlante = () => {
         console.log(response); // affiche les données dans la console
         alert("Plante ajoutée avec succès");
         setIdPlante(response.id);
+        handleNext();
       } catch (error) {
         console.log(error);
       }
@@ -84,6 +95,7 @@ const AjoutPlante = () => {
       alert("Photo ajoutée avec succès");
       setAfficherTroisiemeFormulaire(true);
       setAfficherDeuxiemeFormulaire(true);
+      handleNext();
       console.log(afficherDeuxiemeFormulaire + " " + afficherTroisiemeFormulaire)
       console.log(response); // affiche les données dans la console
 
@@ -101,6 +113,7 @@ const AjoutPlante = () => {
         conseilPlante
       );
         alert("Conseil ajouté avec succès");
+        handleNext();
     } catch (error) {
       console.log(error);
     }
@@ -110,6 +123,7 @@ const AjoutPlante = () => {
 
   return (
     <>
+      <ProgressBar currentStep={currentStep} />
 
     <div className='formulaireAjoutPlante'>
       {!afficherDeuxiemeFormulaire && !afficherTroisiemeFormulaire &&  (
@@ -209,7 +223,7 @@ const AjoutPlante = () => {
         </div>
         </div>
        <div className="PlacementButton">
-         <button className="buttonAddPlante" type="submit">Envoyer</button>
+         <button className="buttonAddPlante" onClick={handleClickAfter} type="submit">Envoyer</button>
        </div>
        </form>
       

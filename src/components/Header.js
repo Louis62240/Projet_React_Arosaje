@@ -12,10 +12,15 @@ import Accueil from "./Accueil.js";
 import VosPlantes from "./VosPlantes.js";
 import Profil from "./Profil.js";
 
-const Header = ({ onDisconnect }) => {
+const Header = ({ onDisconnect}) => {
   const [showAccueil, setShowAccueil] = useState(true);
   const [showVosPlantes, setShowVosPlantes] = useState(false);
   const [showProfil, setShowProfil] = useState(false);
+
+  const handleClickAccueil = () => {
+    setShowAccueil(true);
+  };
+
   useState(() => {
     setShowAccueil(true);
     setShowVosPlantes(false);
@@ -120,7 +125,7 @@ const Header = ({ onDisconnect }) => {
             </div>
           </div>
         </div>
-        <Accueil />
+        <Accueil setShowAccueil={setShowAccueil} />
       </>
     );
   } else if (showVosPlantes) {
