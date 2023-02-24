@@ -8,6 +8,7 @@ const AjoutPlante = () => {
   const [descriptionPlante, setDescriptionPlante] = useState("");
   const [localisation, setLocalisation] = useState("");
   const [afficherDeuxiemeFormulaire, setAfficherDeuxiemeFormulaire] = useState(false);
+  const [afficherTroisiemeFormulaire, setAfficherTroisiemeFormulaire] = useState(false);
   const [idPlante, setIdPlante] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
@@ -81,18 +82,29 @@ const AjoutPlante = () => {
       );
       alert("Photo ajoutée avec succès");
       console.log(response); // affiche les données dans la console
+      setAfficherTroisiemeFormulaire(true);
 
     } catch (error) {
       console.log(error);
     }
   };
+  const handleSubmit3 = async (event) => {
+    event.preventDefault();
+    // Code pour envoyer le fichier vers le serveur
+    try {
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+    
 
 
   return (
     <>
 
     <div className='formulaireAjoutPlante'>
-      {!afficherDeuxiemeFormulaire && (
+      {!afficherDeuxiemeFormulaire && afficherTroisiemeFormulaire(
       <form onSubmit={handleSubmit}>
         <div>
           <label className='labelAjout' htmlFor="proprietaireId">Propriétaire ID:</label>
@@ -142,7 +154,7 @@ const AjoutPlante = () => {
         </div>
       </form>
       )}
-      {afficherDeuxiemeFormulaire && (
+      {afficherDeuxiemeFormulaire && !afficherTroisiemeFormulaire(
         <div className="add-image-container">
         <form onSubmit={handleSubmit2}>
           <div className="form-group">
@@ -171,6 +183,36 @@ const AjoutPlante = () => {
         </form>
        
       </div>
+      )}
+      {afficherTroisiemeFormulaire && (
+       <div className="add-image-container">
+       <form onSubmit={handleSubmit3}>
+         <div className="form-group">
+           <label htmlFor="file-upload" className="custom-file-upload">
+             Sélectionner un fichier
+           </label>
+           <input 
+             id="file-upload"
+             type="file"
+             onChange={handleFileChange}
+             accept="image/*"
+           />
+         </div>
+         <div className="preview-image-container">
+         {selectedFile && (
+           <img
+             className="preview-image"
+             src={URL.createObjectURL(selectedFile)}
+             alt="Prévisualisation"
+           />
+         )}
+       </div>
+       <div className="PlacementButton">
+         <button className="buttonAddPlante" type="submit">Envoyer</button>
+       </div>
+       </form>
+      
+     </div> 
       )}
     </div></>
   );

@@ -101,11 +101,10 @@ const Home = () => {
         <div className="PlanteBrique">
   {filteredPlantes.map((plante) => (
     <div className="PlanteBriqueInside card" style={{ width: "18rem" }}>
-      <img
-              src={`data:image/jpeg;base64,${plante.photo}`}
-        className="card-img-top"
-        alt="..."
-      />
+      <img src={plante.photo_url ? `data:image/jpeg;base64,${plante.photo_url}` : require("../assets/img/plante.jpg")}
+     className="card-img-top"
+     alt="..."
+/>
       <div className="card-body">
         <h5 className="card-title">{plante.nom_plante}</h5>
         <p className="positionLocalisation">

@@ -53,10 +53,14 @@ export const addPhoto = async (photo, idPlante) => {
     reader.onload = async () => {
       const base64Image = reader.result.split(",")[1];
       console.log(base64Image);
+      
       // Envoyer l'image en base64 à l'API
-      const response = await fetch(`http://127.0.0.1:8000/photo/${idPlante}?photo_url=${base64Image}`, {
-        method: 'POST'
-      });
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_plantes: idPlante, photo_url: base64Image })
+      };
+      const response = await fetch('http://127.0.0.1:8000/photo/', requestOptions);
       const data = await response.json();
       return data;
     };
@@ -64,6 +68,7 @@ export const addPhoto = async (photo, idPlante) => {
     console.log(error);
   }
 };
+
 
 const CHECK_LOGIN_URL = 'http://127.0.0.1:8000/connexion';
 
