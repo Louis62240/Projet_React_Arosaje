@@ -45,6 +45,7 @@ const addPlante = async (proprietaire_id, nom_plante, description_plante, locali
     console.log(error);
   }
 };
+
 export const addPhoto = async (photo, idPlante) => {
   try {
     // Convertir l'objet File en une chaîne de caractères en base64
