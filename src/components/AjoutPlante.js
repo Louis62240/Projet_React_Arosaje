@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { addPlante , addPhoto} from "../services/api";
+import { addPlante , addPhoto, addConseil} from "../services/api";
 import "../assets/css/AjouterPlante.css";
-import PrendrePhoto from "../components/PrendrePhoto.js";
-
+import PrendrePhoto from "./PrendrePhoto";
 const AjoutPlante = () => {
   const [proprietaireId, setProprietaireId] = useState("");
   const [nomPlante, setNomPlante] = useState("");
@@ -82,8 +81,9 @@ const AjoutPlante = () => {
         idPlante,
       );
       alert("Photo ajoutée avec succès");
-      console.log(response); // affiche les données dans la console
       setAfficherTroisiemeFormulaire(true);
+      console.log(response); // affiche les données dans la console
+
 
     } catch (error) {
       console.log(error);
@@ -105,7 +105,7 @@ const AjoutPlante = () => {
     <>
 
     <div className='formulaireAjoutPlante'>
-      {!afficherDeuxiemeFormulaire && afficherTroisiemeFormulaire(
+      {!afficherDeuxiemeFormulaire && !afficherTroisiemeFormulaire &&  (
       <form onSubmit={handleSubmit}>
         <div>
           <label className='labelAjout' htmlFor="proprietaireId">Propriétaire ID:</label>
@@ -155,7 +155,8 @@ const AjoutPlante = () => {
         </div>
       </form>
       )}
-      {afficherDeuxiemeFormulaire && !afficherTroisiemeFormulaire(
+      {afficherDeuxiemeFormulaire && !afficherTroisiemeFormulaire &&(
+        <><PrendrePhoto></PrendrePhoto>
         <div className="add-image-container">
         <form onSubmit={handleSubmit2}>
           <div className="form-group">
@@ -179,21 +180,19 @@ const AjoutPlante = () => {
           )}
         </div>
         <div className="PlacementButton">
-          <button className="buttonAddPlante" type="submit">Envoyer</button>
+          <button className="buttonAddPlante" type="submit">Suivant</button>
         </div>
         </form>
        
       </div>
+      </>
       )}
-      {afficherTroisiemeFormulaire && (
-        <>
-        <PrendrePhoto></PrendrePhoto>
-        
-       <div className="add-image-container">
+      {afficherTroisiemeFormulaire && afficherDeuxiemeFormulaire &&  (
+ <>      <div className="add-image-container">
        <form onSubmit={handleSubmit3}>
          <div className="form-group">
-           <label htmlFor="file-upload" className="custom-file-upload">
-             Sélectionner un fichier
+           <label htmlFor="conseil" className="custom-file-upload">
+             Conseil
            </label>
            <input 
              id="file-upload"
@@ -216,8 +215,7 @@ const AjoutPlante = () => {
        </div>
        </form>
       
-     </div>
-     </> 
+     </div> </>
       )}
     </div></>
   );

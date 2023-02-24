@@ -69,7 +69,21 @@ export const addPhoto = async (photo, idPlante) => {
   }
 };
 
-
+export const addConseil = async (idPlante, conseil) => {
+  const url = `http://127.0.0.1:8000/conseil/${idPlante}?conseil=${conseil}`;
+  try {
+    const response = await axios.post(url, {}, {
+      headers: {
+        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log(response.data); // affiche les données dans la console
+    return response.data; // retourne les données sous forme d'objet JSON
+  } catch (error) {
+    console.log(error);
+  }
+};
 const CHECK_LOGIN_URL = 'http://127.0.0.1:8000/connexion';
 
 /**
