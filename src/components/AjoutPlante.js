@@ -10,6 +10,29 @@ const AjoutPlante = () => {
   const [afficherDeuxiemeFormulaire, setAfficherDeuxiemeFormulaire] = useState(false);
   const [idPlante, setIdPlante] = useState("");
 
+  const handleGetLocation = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      // Récupère les coordonnées de l'utilisateur
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      // Appelle l'API OpenCage Geocoder pour obtenir le nom de la ville correspondant aux coordonnées
+      const apiKey = '506c483206104e4eb57141fd064060a6';
+      const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=${apiKey}&language=fr&pretty=1`;
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          // Met à jour le state avec le nom de la ville
+          const localisation = data.results[0].components.city;
+          setLocalisation(localisation);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      console.log(localisation);
+    });
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault(); 
     try {
@@ -97,6 +120,11 @@ const AjoutPlante = () => {
             value={localisation}
             onChange={(event) => setLocalisation(event.target.value)}
           />
+              <div className="input-group-append">
+                  <button className="btn btn-outline-secondary" type="button" onClick={handleGetLocation}>
+                    Obtenir la localisation
+                  </button>
+                </div>
         </div>
         <div className="PlacementButton">
           <button className="buttonAddPlante" type="submit">

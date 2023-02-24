@@ -57,6 +57,30 @@ const Home = () => {
   };
 
   const [show, setShow] = useState(false);
+  const [city, setCity] = useState("");
+
+  const handleGetLocation = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      // Récupère les coordonnées de l'utilisateur
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      // Appelle l'API OpenCage Geocoder pour obtenir le nom de la ville correspondant aux coordonnées
+      const apiKey = '506c483206104e4eb57141fd064060a6';
+      const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=${apiKey}&language=fr&pretty=1`;
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          // Met à jour le state avec le nom de la ville
+          const city = data.results[0].components.city;
+          setCity(city);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      console.log(city);
+    });
+  };
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
