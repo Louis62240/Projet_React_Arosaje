@@ -11,7 +11,6 @@ const Accueil = ({setShowAccueil,setShowProfil,setShowVosPlantes}) => {
   useEffect(() => {
     getPlantes().then(data => {
       setPlantes(data);
-      console.log(data)
     });
   }, []);
 
@@ -140,7 +139,7 @@ const Accueil = ({setShowAccueil,setShowProfil,setShowVosPlantes}) => {
           </form>
         </div>
         <div>
-          <button className="buttonAdd" onClick={handleClick}>
+          <button className="btn btn-outline-success my-2 my-sm-10" onClick={handleClick}>
             Ajouter sa plante
           </button>
         </div>
@@ -149,7 +148,7 @@ const Accueil = ({setShowAccueil,setShowProfil,setShowVosPlantes}) => {
   {filteredPlantes.map((plante) => (
     <div className="PlanteBriqueInside card" style={{ width: "18rem" }}>
       <img src={plante.photo_url ? `data:image/jpeg;base64,${plante.photo_url}` : require("../assets/img/plante.jpg")}
-     className="card-img-top" style={{maxHeight: "200px",maxWidth: "300px"}}
+     className="ImagePlante card-img-top"
      alt="..."
 />
       <div className="card-body">
@@ -161,9 +160,9 @@ const Accueil = ({setShowAccueil,setShowProfil,setShowVosPlantes}) => {
             />
             {plante.localisation}
           </button>
-        <p className="card-text">Description : {plante.description_plante}</p>
+        <p className="description card-text">Description : {plante.description_plante}</p>
         <button
-          className="buttonEnSavoirPlus btn btn-primary"
+          className="buttonEnSavoirPlus btn btn-outline-success my-2 my-sm-10"
           data-toggle="modal"
           data-target="#exampleModal"
           onClick={() => {
@@ -240,6 +239,7 @@ const Accueil = ({setShowAccueil,setShowProfil,setShowVosPlantes}) => {
   } else {
     return (
       <>
+      <div className="animated-div">
         <div className="SearchBarDiv">
           <p className="texteStatut">Statut : Propriétaire</p>
           <form class="SearchBar form-inline my-2 my-lg-0">
@@ -255,15 +255,15 @@ const Accueil = ({setShowAccueil,setShowProfil,setShowVosPlantes}) => {
           </form>
         </div>{" "}
         <div>
-          <button className="buttonAdd" onClick={handleClick}>
+          <button className="btn btn-outline-success my-2 my-sm-10" onClick={handleClick}>
             Revenir à la liste des plantes
           </button>
         </div>
         {isVisible && (
-          <div className="animated-div">
+          
            <AjoutPlante setShowAccueil={setShowAccueil} setShowProfil={setShowProfil} setShowVosPlantes={setShowVosPlantes}></AjoutPlante>
-          </div>
         )}
+        </div>
       </>
     );
   }

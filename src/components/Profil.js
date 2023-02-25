@@ -8,18 +8,13 @@ const Profil = () => {
     const [telUser, setTelUser] = useState("");
 
     useEffect(() => {
-        getUserId(1)
-        .then((data) => {
-            // Mettre à jour les variables d'état avec les informations de l'utilisateur sélectionné
-            setNomUser(data.utilisateur[1]);
-            setMailUser(data.utilisateur[4]);
-            setTelUser(data.utilisateur[3]);
-            })
-            .catch((error) => {
-            console.log(error);
-            });
-
-    }, [])
+        const utilisateur = JSON.parse(localStorage.getItem('utilisateur'));
+        if (utilisateur) {
+          setNomUser(utilisateur.utilisateur[1]);
+          setMailUser(utilisateur.utilisateur[4]);
+          setTelUser(utilisateur.utilisateur[3]);
+        }
+      }, []);
 
     return (
         <>

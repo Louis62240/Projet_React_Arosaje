@@ -2,7 +2,6 @@ import React from "react";
 import "../assets/css/ProgressBar.css";
 
 const ProgressBar = ({ currentStep }) => {
-    console.log(currentStep)
   return (
     <div className="progress-bar-container">
       <div className={`progress-bar-step ${currentStep >= 1 ? "completed" : ""}`}>

@@ -8,7 +8,6 @@ const getPlantes = () => {
     }
   })
   .then((response) => {
-    console.log(response.data); // affiche les données dans la console
     return response.data; // retourne les données sous forme d'objet JSON
   })
   .catch((error) => {
@@ -23,7 +22,6 @@ const getPlanteById = (id) => {
     }
   })
   .then((response) => {
-    console.log(response.data); // affiche les données dans la console
     return response.data; // retourne les données sous forme d'objet JSON
   })
   .catch((error) => {
@@ -97,14 +95,14 @@ const CHECK_LOGIN_URL = 'http://127.0.0.1:8000/connexion';
  */
 export async function checkConnexion(email, password,onConnect) {
   try {
-    console.log(`${CHECK_LOGIN_URL}?email=${email}&mot_de_passe=${password}`)
     // Faire une requête GET à l'API avec les identifiants fournis dans les paramètres d'URL
     const response = await axios.get(`${CHECK_LOGIN_URL}?email=${email}&mot_de_passe=${password}`);
     console.log(response.data)
     if(response.data.connexion===true)
     {
-      console.log('yes')
       onConnect();
+      const utilisateur =await getUserId(response.data.id_utilisateur);
+      localStorage.setItem('utilisateur', JSON.stringify(utilisateur));
       return true;
     }
     else
@@ -117,6 +115,16 @@ export async function checkConnexion(email, password,onConnect) {
     return false;
   }
 }
+export const getUserId = async (id_utilisateur) => {
+  const url = `http://127.0.0.1:8000/utilisateur/id/${id_utilisateur}`;
+  try {
+    const response = await axios.get(url);
+    return response.data; // retourne l'id de l'utilisateur
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const addUser = async (nom, mot_de_passe, telephone, email) => {
   const url = `http://127.0.0.1:8000/utilisateur?nom=${nom}&mot_de_passe=${mot_de_passe}&telephone=${telephone}&email=${email}`;
   try {
@@ -126,24 +134,12 @@ const addUser = async (nom, mot_de_passe, telephone, email) => {
         'Content-Type': 'application/json'
       }
     });
-    console.log(response.data); // affiche les données dans la console
     return response.data; // retourne les données sous forme d'objet JSON
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getUserId = async (id_utilisateur) => {
-  const url = `http://127.0.0.1:8000/utilisateur/id/${id_utilisateur}`;
-  try {
-    const response = await axios.get(url);
-    console.log("userID");
-    console.log(response.data); // affiche l'id de l'utilisateur dans la console
-    return response.data; // retourne l'id de l'utilisateur
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 
 

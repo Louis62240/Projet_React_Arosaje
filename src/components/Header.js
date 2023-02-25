@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import "../assets/css/Header.css";
 import Accueil from "./Accueil.js";
 import VosPlantes from "./VosPlantes.js";
 import Profil from "./Profil.js";
-
+import { getUserId } from "../services/api";
 
 const Header = ({ onDisconnect}) => {
   const [showAccueil, setShowAccueil] = useState(true);
   const [showVosPlantes, setShowVosPlantes] = useState(false);
   const [showProfil, setShowProfil] = useState(false);
+
+  
+  const [nomUser, setNomUser] = useState("");
+  const [mailUser, setMailUser] = useState("");
+  const [telUser, setTelUser] = useState("");
 
   useState(() => {
     setShowAccueil(true);
@@ -16,7 +21,14 @@ const Header = ({ onDisconnect}) => {
     setShowProfil(false);
   }, []);
 
-  if (showAccueil) {
+  useEffect(() => {
+    const utilisateur = JSON.parse(localStorage.getItem('utilisateur'));
+    if (utilisateur) {
+      setNomUser(utilisateur.utilisateur[1]);
+      setMailUser(utilisateur.utilisateur[4]);
+      setTelUser(utilisateur.utilisateur[3]);
+    }
+  }, []);
     return (
       <>
         <link
@@ -42,7 +54,7 @@ const Header = ({ onDisconnect}) => {
             <div className="PlacementMenu d-flex align-items-center">
               <div>
                 <div
-                  className="NavMenuLink"
+                  className={`NavMenuLink ${showAccueil ? 'active' : ''}`}
                   onClick={() => {
                     setShowAccueil(true);
                     setShowVosPlantes(false);
@@ -54,7 +66,7 @@ const Header = ({ onDisconnect}) => {
               </div>
               <div>
                 <div
-                  className="NavMenuLink"
+                  className={`NavMenuLink ${showVosPlantes ? 'active' : ''}`}
                   onClick={() => {
                     setShowAccueil(false);
                     setShowVosPlantes(true);
@@ -66,6 +78,7 @@ const Header = ({ onDisconnect}) => {
               </div>
             </div>
             <div className="PlacementUser">
+              <p className="PlacementElementUser">{nomUser}</p>
               <i
                 onClick={() => {
                   setShowAccueil(false);
@@ -118,7 +131,6 @@ const Header = ({ onDisconnect}) => {
       {showProfil && <Profil />}
       </>
     );
-  }
 };
 
 export default Header;

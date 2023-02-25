@@ -27,7 +27,7 @@ function Connexion({ onConnect }) {
     const isLoginValid = await checkConnexion(email, password, onConnect);
 
     if (isLoginValid) {
-      console.log('yesss'); // Connexion réussie, rediriger vers la page d'accueil
+
     } else {
       setErrorMessage('Adresse email ou mot de passe incorrect.'); // Afficher un message d'erreur
     }
@@ -37,7 +37,6 @@ function Connexion({ onConnect }) {
     event.preventDefault();
     try {
       const result = await addUser(nom, motDePasse, telephone, email);
-      console.log(result);
       alert('Inscription réussie !');
       // Ajouter ici le code pour rediriger vers une autre page ou afficher un message de confirmation
     } catch (error) {

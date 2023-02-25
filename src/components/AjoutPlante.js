@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import { addPlante , addPhoto, addConseil} from "../services/api";
 import "../assets/css/AjouterPlante.css";
 import PrendrePhoto from "./PrendrePhoto";
@@ -12,10 +12,16 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
   const [afficherDeuxiemeFormulaire, setAfficherDeuxiemeFormulaire] = useState(false);
   const [afficherTroisiemeFormulaire, setAfficherTroisiemeFormulaire] = useState(false);
   const [idPlante, setIdPlante] = useState("");
-  const [imageFile, setImageFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState(null);
+  const [idUser , setIdUser] = useState("");
 
   const [currentStep, setCurrentStep] = useState(1);
+
+  useEffect(() => {
+    const utilisateur = JSON.parse(localStorage.getItem('utilisateur'));
+    if (utilisateur) {
+      setIdUser(utilisateur.utilisateur[0]);
+    }
+  }, []);
 
   const handleNext = () => {
     setCurrentStep(currentStep + 1);
@@ -42,7 +48,6 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
         .catch((error) => {
           console.error(error);
         });
-      console.log(localisation);
     });
   };
 
@@ -55,7 +60,6 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
           descriptionPlante,
           localisation,
         );
-        console.log(response); // affiche les données dans la console
         alert("Plante ajoutée avec succès");
         setIdPlante(response.id);
         handleNext();
@@ -96,8 +100,6 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
       setAfficherTroisiemeFormulaire(true);
       setAfficherDeuxiemeFormulaire(true);
       handleNext();
-      console.log(afficherDeuxiemeFormulaire + " " + afficherTroisiemeFormulaire)
-      console.log(response); // affiche les données dans la console
 
 
     } catch (error) {

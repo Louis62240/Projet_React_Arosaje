@@ -89,24 +89,19 @@ i {
 }
 
 .NavMenuLink:hover{
-	color: #43cc87;
-}
-
-.NavMenuLink::after{
-	background-color: #43cc87;
-	color: white;
-	border-radius: 10px;
-	border-color: 2px solid #D3D3D3;
-}
-
-.NavMenuLink:active{
 	background-color: #43cc87;
 	color: white;
 	border-radius: 10px;
 	border-color: 2px solid #D3D3D3;
 }
   
-
+.active 
+{
+	background-color: #43cc87;
+	color: white;
+	border-radius: 10px;
+	border-color: 2px solid #D3D3D3;
+}
 
 .containerHeader
 {
@@ -158,3 +153,8 @@ i {
   {
     margin-left: auto;
   }
+  .description
+{
+	font-size: 15px;
+	
+}
