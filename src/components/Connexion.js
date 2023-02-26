@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { checkConnexion , addUser} from '../services/api';
 import '../assets/css/Connexion.css';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 function Connexion({ onConnect }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoginForm, setIsLoginForm] = useState(true); // state pour savoir quel formulaire afficher
-
+  const [afficherMotDePasse, setAfficherMotDePasse] = useState(false);
   const [nom, setNom] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
   const [telephone, setTelephone] = useState("");
@@ -22,9 +23,10 @@ function Connexion({ onConnect }) {
   const handleTelephoneInscriptionChange = (event) => setTelephone(event.target.value);
   
 
-  // addUser('Louis', 'bebou', '0751663896', 'l.hanquiez22@gmail.com')
-  // .then(data => console.log(data))
-  // .catch(error => console.log(error));
+  const toggleAfficherMotDePasse = () => {
+    setAfficherMotDePasse(!afficherMotDePasse);
+  };
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();

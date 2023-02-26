@@ -25,7 +25,7 @@ const Accueil = () => {
   const [PlanteConseilSelected, setPlanteConseilSelected] = useState("");
   const [PlanteProprietaire, setPlanteProprietaire] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-
+ const [PhotoPlanteSelected, setPhotoPlanteSelected] = useState('');
   const [ville, setVille] = useState("");
 
   const [mapURL, setMapURL] = useState("");
@@ -37,9 +37,11 @@ const Accueil = () => {
       getPlanteById(id)
         .then((data) => {
           // Mettre à jour les variables d'état avec les informations de la plante sélectionnée
+          console.log(data)
+          setPhotoPlanteSelected(data.photo_url);
           setPlanteNameSelected(data.nom_plante);
-          setPlanteDescriptionSelected(data.localisation);
-          setPlanteLocalisationSelected(data.description_plante);
+          setPlanteDescriptionSelected(data.description_plante);
+          setPlanteLocalisationSelected(data.localisation);
           setPlanteConseilSelected(data.conseil);
           setPlanteProprietaire(data.nom_proprietaire);
           setVille(data.localisation);
@@ -150,16 +152,16 @@ const Accueil = () => {
       <img src={plante.photo_url ? `data:image/jpeg;base64,${plante.photo_url}` : require("../assets/img/plante.jpg")}
      className="ImagePlante card-img-top"
      alt="..."
-/>
-      <div className="card-body">
-        <h5 className="card-title">{plante.nom_plante}</h5>
-          <button className="positionLocalisation" data-toggle="modal" onClick={() => {handleGetLocation(ville, plante);}}>
+/><button className="positionLocalisation" data-toggle="modal" onClick={() => {handleGetLocation(ville, plante);}}>
             <img
               src={require("../assets/img/localisation.png")}
               className="imgLocalisation"
             />
             {plante.localisation}
           </button>
+      <div className="card-body">
+        <h5 className="card-title">{plante.nom_plante}</h5>
+          
         <p className="description card-text">Description : {plante.description_plante}</p>
         <button
           className="buttonEnSavoirPlus btn btn-outline-success my-2 my-sm-10"
@@ -181,24 +183,22 @@ const Accueil = () => {
               <Modal.Title>{PlanteNameSelected}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <img
-                src={require("../assets/img/plante.jpg")}
-                class="card-img-top"
-              ></img>
+            <img src={PhotoPlanteSelected ? `data:image/jpeg;base64,${PhotoPlanteSelected}` : require("../assets/img/plante.jpg")} class='card-img top' />
+
               Proprietaire : {PlanteProprietaire}
-              <br />
+              <br /><br/>
               Description : {PlanteDescriptionSelected}
-              <br />
+              <br /><br/>
               Localisation : {PlanteLocalisationSelected}
-              <br />
+              <br /><br/>
               Conseil : {PlanteConseilSelected}
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose}>
                 Fermer
               </Button>
-              <Button variant="primary" onClick={handleClose}>
-                Appliquer les modifications
+              <Button style={{background:'#28a745 '}} onClick={handleClose}>
+                Garder cette plante
               </Button>
             </Modal.Footer>
           </Modal>

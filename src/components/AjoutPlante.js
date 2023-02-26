@@ -75,7 +75,6 @@ const AjoutPlante = ({ setIsVisible }) => {
           descriptionPlante,
           localisation,
         );
-        alert("Plante ajoutée avec succès");
         setIdPlante(response.id);
         handleNext();
         setShowAlert(true);        
@@ -192,7 +191,7 @@ const AjoutPlante = ({ setIsVisible }) => {
         <div>
           <label className='labelAjout' htmlFor="descriptionPlante">Description de la plante:</label>
           <input className='InputAjout'
-            type="text"
+            type="textarea"
             id="descriptionPlante"
             value={descriptionPlante}
             onChange={(event) => setDescriptionPlante(event.target.value)}
@@ -220,7 +219,8 @@ const AjoutPlante = ({ setIsVisible }) => {
       </form>
       )}
       {afficherDeuxiemeFormulaire && !afficherTroisiemeFormulaire &&(
-        <><PrendrePhoto></PrendrePhoto>
+        <><PrendrePhoto  setSelectedFile={setSelectedFile} ></PrendrePhoto>
+        <p>Vous souhaitez insérer votre photo :</p>
         <div className="add-image-container">
         <form onSubmit={handleSubmit2}>
           <div className="form-group">

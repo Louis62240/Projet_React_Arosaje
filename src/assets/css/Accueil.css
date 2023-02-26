@@ -24,7 +24,10 @@ body{
     color:black;
 
 }
-
+.card-body
+{
+    position: relative;
+}
 .PlanteBrique
 {
     display: flex;
@@ -41,7 +44,9 @@ flex-basis: calc(20% - 20px); /* 20% width with a 20px margin between each eleme
     background-color: #43cc87 !important;
     border-color: white !important;
     color:white !important;
-    width: 100%;
+    width: 85%;
+    position:absolute;
+    bottom: 0;
 }
 .imgLocalisation
 {
