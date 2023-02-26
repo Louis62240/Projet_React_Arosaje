@@ -19,10 +19,18 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
   useEffect(() => {
     const utilisateur = JSON.parse(localStorage.getItem('utilisateur'));
     if (utilisateur) {
+      setProprietaireId(utilisateur.utilisateur[0]);
+    }
+  }, []);
+
+  useEffect(() => {
+    const utilisateur = JSON.parse(localStorage.getItem('utilisateur'));
+    if (utilisateur) {
       setIdUser(utilisateur.utilisateur[0]);
     }
   }, []);
 
+  
   const handleNext = () => {
     setCurrentStep(currentStep + 1);
   };
@@ -133,15 +141,6 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
     <div className='formulaireAjoutPlante'>
       {!afficherDeuxiemeFormulaire && !afficherTroisiemeFormulaire &&  (
       <form onSubmit={handleSubmit}>
-        <div>
-          <label className='labelAjout' htmlFor="proprietaireId">Propriétaire ID:</label>
-          <input className='InputAjout'
-            type="text"
-            id="proprietaireId"
-            value={proprietaireId}
-            onChange={(event) => setProprietaireId(event.target.value)}
-          />
-        </div>
         <div>
           <label className='labelAjout' htmlFor="nomPlante">Nom de la plante:</label>
           <input className='InputAjout'
