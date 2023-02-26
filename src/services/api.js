@@ -1,6 +1,6 @@
 import axios from 'axios';
 import bcrypt from 'bcryptjs';
-const getPlantes = () => {
+export const getPlantes = () => {
   return axios.get("http://127.0.0.1:8000/plantes/sansGardien", {
     headers: {
       'Access-Control-Allow-Origin': 'http://localhost:3000',
@@ -22,7 +22,7 @@ async function hashPassword(password) {
 async function checkPassword(password, hashedPassword) {
   return await bcrypt.compare(password, hashedPassword);
 }
-const getPlanteById = (id) => {
+export const getPlanteById = (id) => {
   return axios.get(`http://127.0.0.1:8000/plante/${id}`, {
     headers: {
       'Access-Control-Allow-Origin': 'http://localhost:3000',
@@ -36,7 +36,7 @@ const getPlanteById = (id) => {
     console.log(error);
   });
 };
-const addPlante = async (proprietaire_id, nom_plante, description_plante, localisation) => {
+export const addPlante = async (proprietaire_id, nom_plante, description_plante, localisation) => {
   const url = `http://127.0.0.1:8000/plante?proprietaire_id=${proprietaire_id}&nom_plante=${nom_plante}&description_plante=${description_plante}&localisation=${localisation}`;
   try {
     const response = await axios.post(url, {
@@ -113,31 +113,9 @@ export async function checkConnexion(email, password,onConnect) {
   {
     console.log(error);
   }
- 
-  // try {
-    
-  //   // Faire une requête GET à l'API avec les identifiants fournis dans les paramètres d'URL
-  //   const response = await axios.get(`${CHECK_LOGIN_URL}?email=${email}&mot_de_passe=${password}`);
-  //   console.log(response.data)
-  //   if(response.data.connexion===true)
-  //   {
-  //     onConnect();
-  //     const utilisateur =await getUserId(response.data.id_utilisateur);
-  //     localStorage.setItem('utilisateur', JSON.stringify(utilisateur));
-  //     return true;
-  //   }
-  //   else
-  //   {
-  //     return false;
-  //   }
-  // } catch (error) {
-  //   // En cas d'erreur, afficher un message dans la console et retourner false
-  //   console.error(error);
-  //   return false;
-  // }
 }
 
-async function CheckConnexionPassword(email,password) {
+export async function CheckConnexionPassword(email,password) {
   try {
     // Faire une requête GET à l'API avec l'email fourni dans les paramètres d'URL
     const response = await axios.get(`${PASSWORD_LOGIN_URL}?email=${email}`);
@@ -153,11 +131,27 @@ async function CheckConnexionPassword(email,password) {
     return false;
   }
 }
-const addUser = async (nom, mot_de_passe, telephone, email) => {
+export const addUser = async (nom, mot_de_passe, telephone, email) => {
   const hashedPassword = await hashPassword(mot_de_passe);
   const url = `http://127.0.0.1:8000/utilisateur?nom=${nom}&mot_de_passe=${hashedPassword}&telephone=${telephone}&email=${email}`;
   try {
     const response = await axios.post(url, {
+      headers: {
+        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Content-Type': 'application/json'
+      }
+    });
+    return response.data; // retourne les données sous forme d'objet JSON
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateUser = async (id_utilisateur, nom, mot_de_passe, telephone, email) => {
+  const hashedPassword = await hashPassword(mot_de_passe);
+  const url = `http://127.0.0.1:8000/utilisateur/${id_utilisateur}?nom=${nom}&mot_de_passe=${hashedPassword}&telephone=${telephone}&email=${email}`;
+  try {
+    const response = await axios.put(url, {
       headers: {
         'Access-Control-Allow-Origin': 'http://localhost:3000',
         'Content-Type': 'application/json'
@@ -180,10 +174,3 @@ export const getUserId = async (id_utilisateur) => {
   }
 };
 
-
-
-
-
-
-
-export { getPlantes ,getPlanteById,addPlante,addUser};

@@ -41,6 +41,28 @@ function Connexion({ onConnect }) {
   const handleSubmitInscription = async (event) => {
     event.preventDefault();
     try {
+      // Vérifier que tous les champs requis sont remplis
+      if (!nom || !emailInscription || !motDePasse || !telephone) {
+        throw new Error('Veuillez remplir tous les champs requis');
+      }
+  
+      // Vérifier que l'adresse email est valide
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailInscription)) {
+        throw new Error('Adresse email invalide');
+      }
+  
+      // Vérifier que le mot de passe a une longueur minimale
+      if (motDePasse.length < 8) {
+        throw new Error('Le mot de passe doit contenir au moins 8 caractères');
+      }
+  
+      // Vérifier que le numéro de téléphone est valide
+      const phoneRegex = /^0[1-9]\d{8}$/;
+      if (!phoneRegex.test(telephone)) {
+        throw new Error('Numéro de téléphone invalide');
+      }
+  
       const result = await addUser(nom, motDePasse, telephone, emailInscription);
       alert('Inscription réussie !');
       // Ajouter ici le code pour rediriger vers une autre page ou afficher un message de confirmation
@@ -48,6 +70,7 @@ function Connexion({ onConnect }) {
       setError(error.message);
     }
   };
+  
 
   const handleSwitchForm = () => {
     setIsLoginForm(!isLoginForm); // Inverser l'état du formulaire affiché
