@@ -126,7 +126,7 @@ const Header = ({ onDisconnect}) => {
             </div>
           </div>
         </div>
-        {showAccueil && <Accueil setShowAccueil={setShowAccueil} setShowProfil={setShowProfil} setShowVosPlantes={setShowVosPlantes}/>}
+        {showAccueil && <Accueil/>}
       {showVosPlantes && <VosPlantes />}
       {showProfil && <Profil />}
       </>

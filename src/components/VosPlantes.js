@@ -41,7 +41,7 @@ const Home = () => {
   const handleShow = () => setShow(true);
   return (
     
-    <>
+    <><div className="animated-div">
       <div className='ComponentVosPlantes'>
         <p className="texteStatut">Vos plantes :</p>
           <div className="PlanteBrique">
@@ -101,6 +101,7 @@ const Home = () => {
             </Modal.Footer>
           </Modal>
         </div>
+    </div>
     </>
   );
 };

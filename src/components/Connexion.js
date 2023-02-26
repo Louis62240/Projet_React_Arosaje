@@ -60,39 +60,42 @@ function Connexion({ onConnect }) {
       <div className="cardConnexion">
         
         {isLoginForm ? (
+          <>
+          <p className='texteRaviRevoir'>Ravi de vous revoir !</p>
           <form className='formConnexion animated-div' onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className='labelConnexion' htmlFor="email">Adresse email :</label>
+              <label className='labelConnexion' htmlFor="email">Adresse email :</label><br/>
               <input className='InputConnexion' type="email" id="email" name="email" value={email} onChange={handleEmailChange} />
             </div>
             <div className="form-group">
-              <label className='labelConnexion' htmlFor="password">Mot de passe :</label>
+              <label className='labelConnexion' htmlFor="password">Mot de passe :</label><br/>
               <input className='InputConnexion' type="password" id="password" name="password" value={password} onChange={handlePasswordChange} />
             </div>
             {errorMessage && <div className="error">{errorMessage}</div>}
             <br/>
             <button className="btnConnexion" type="submit">Se connecter</button><br/>
             <a className='buttonSecondaire' onClick={handleSwitchForm}>Vous ne possèdez pas de Compte ? Cliquez ici</a>
-          </form>
+          </form></>
         ) : (
+          <div className="animated-div">
           <form className='formInscription animated-div' onSubmit={handleSubmitInscription}>
             <div className="form-group">
-              <label className='labelConnexion' htmlFor="nom">Nom :</label>
+              <label className='labelConnexion' htmlFor="nom">Nom :</label><br/>
               <input className='InputConnexion' type="text" id="nom" name="nom" value={nom}
           onChange={(event) => setNom(event.target.value)} />
             </div>
             <div className="form-group">
-              <label className='labelConnexion' htmlFor="email">Adresse email :</label>
+              <label className='labelConnexion' htmlFor="email">Adresse email :</label><br/>
               <input className='InputConnexion' type="email" id="email" name="email"  value={emailInscription}
           onChange={(event) => setEmailInscription(event.target.value)}/>
             </div>
             <div className="form-group">
-              <label className='labelConnexion' htmlFor="password">Mot de passe :</label>
+              <label className='labelConnexion' htmlFor="password">Mot de passe :</label><br/>
               <input className='InputConnexion' type="password" id="password" name="password" value={motDePasse}
           onChange={(event) => setMotDePasse(event.target.value)}/>
             </div>
             <div className="form-group">
-              <label className='labelConnexion' htmlFor="telephone">Telephone :</label>
+              <label className='labelConnexion' htmlFor="telephone">Telephone :</label><br/>
               <input className='InputConnexion' type="text" id="telephone" name="telephone"   value={telephone}
           onChange={(event) => setTelephone(event.target.value)}/>
             </div>
@@ -101,6 +104,7 @@ function Connexion({ onConnect }) {
             {error && <div className="error">{error}</div>}
             <a className='buttonSecondaire' onClick={handleSwitchForm}>Vous avez déja un compte ? Cliquez ici</a>
           </form>
+          </div>
         )}
       </div>
     </div>

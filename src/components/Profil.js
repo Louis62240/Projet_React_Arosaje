@@ -19,6 +19,7 @@ const Profil = () => {
       
     return (
         <>
+        <div className="animated-div">
             <div class="container rounded bg-white mt-5 mb-5">
             <div class="row">
                 <div class="col-md-3 border-right">
@@ -40,6 +41,7 @@ const Profil = () => {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
         </>
     );

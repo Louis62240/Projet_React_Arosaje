@@ -11,7 +11,7 @@ body{
 {
     margin: 0 auto;
     width: 50%;
-    padding: 10px;
+    padding: 20px;
     border: 1px solid #ccc;
     border-radius: 1em;
     background-color: #f3f3f3;
@@ -37,15 +37,8 @@ body{
 
 .buttonAddPlante
 {
-    background-color: rgb(55 182 108);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 0.3em;
-    margin: 0.5em;
-    font-size: 1.5em;
-    cursor: pointer;
-    margin-left:auto;
+
+    margin-left:auto !important;
 }
 .PlacementButton
 {

@@ -14,7 +14,7 @@
   }
   
   .progress-bar-step.completed {
-    background-color: #8bc34a;
+    background-color: #43cc87;
   }
   
   .progress-bar-circle {
@@ -24,7 +24,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: #8bc34a;
+    background-color: #43cc87;
     color: #004d40;
     display: flex;
     justify-content: center;
@@ -38,7 +38,7 @@
     right: 0;
     text-align: center;
     font-size: 14px;
-    color: #8bc34a;
+    color: #43cc87;
     font-weight: bold;
     text-transform: uppercase;
   }

@@ -6,7 +6,7 @@ import AjoutPlante from "./AjoutPlante";
 import "../assets/css/Accueil.css";
 import {getPlantes,getPlanteById} from '../services/api'
 
-const Accueil = ({setShowAccueil,setShowProfil,setShowVosPlantes}) => {
+const Accueil = () => {
   const [plantes, setPlantes] = useState([]);
   useEffect(() => {
     getPlantes().then(data => {
@@ -261,7 +261,7 @@ const Accueil = ({setShowAccueil,setShowProfil,setShowVosPlantes}) => {
         </div>
         {isVisible && (
           
-           <AjoutPlante setShowAccueil={setShowAccueil} setShowProfil={setShowProfil} setShowVosPlantes={setShowVosPlantes}></AjoutPlante>
+           <AjoutPlante setIsVisible={setIsVisible}></AjoutPlante>
         )}
         </div>
       </>

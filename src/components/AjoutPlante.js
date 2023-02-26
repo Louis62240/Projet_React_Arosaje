@@ -3,7 +3,8 @@ import { addPlante , addPhoto, addConseil} from "../services/api";
 import "../assets/css/AjouterPlante.css";
 import PrendrePhoto from "./PrendrePhoto";
 import ProgressBar from "./ProgressBar";
-const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
+import {Alert } from "react-bootstrap";
+const AjoutPlante = ({ setIsVisible }) => {
   const [proprietaireId, setProprietaireId] = useState("");
   const [nomPlante, setNomPlante] = useState("");
   const [descriptionPlante, setDescriptionPlante] = useState("");
@@ -13,6 +14,13 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
   const [afficherTroisiemeFormulaire, setAfficherTroisiemeFormulaire] = useState(false);
   const [idPlante, setIdPlante] = useState("");
   const [idUser , setIdUser] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert2, setShowAlert2] = useState(false);
+  const [showAlert3, setShowAlert3] = useState(false);
+  const [showAlert4, setShowAlert4] = useState(false);
+  const [showAlert5, setShowAlert5] = useState(false);
+  const [showAlert6, setShowAlert6] = useState(false);
+
 
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -33,9 +41,6 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
   
   const handleNext = () => {
     setCurrentStep(currentStep + 1);
-  };
-  const handleClickAfter = () => {
-    setShowAccueil(true);
   };
   const handleGetLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -58,7 +63,9 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
         });
     });
   };
-
+  const handleButtonToAccueil = () => {
+    setIsVisible(false);
+  };
   const handleSubmit = async (event) => {
     event.preventDefault(); 
     try {
@@ -71,8 +78,10 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
         alert("Plante ajoutée avec succès");
         setIdPlante(response.id);
         handleNext();
+        setShowAlert(true);        
       } catch (error) {
         console.log(error);
+        setShowAlert2(true);
       }
     if (afficherDeuxiemeFormulaire) {
       
@@ -104,14 +113,15 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
         selectedFile,
         idPlante,
       );
-      alert("Photo ajoutée avec succès");
+      setShowAlert(false)
+      setShowAlert3(true);
       setAfficherTroisiemeFormulaire(true);
       setAfficherDeuxiemeFormulaire(true);
       handleNext();
-
-
     } catch (error) {
       console.log(error);
+       setShowAlert2(false); 
+      setShowAlert4(true);
     }
   };
   const handleSubmit3 = async (event) => {
@@ -122,12 +132,12 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
         idPlante,
         conseilPlante
       );
-      setShowAccueil(true);
-      setShowVosPlantes(false);
-      setShowProfil(false);
-        alert("Conseil ajouté avec succès");
-        handleClickAfter();
+      setShowAlert3(false)
+      setShowAlert5(true);
+      handleButtonToAccueil();
     } catch (error) {
+      setShowAlert4(false)
+      setShowAlert6(true);
       console.log(error);
     }
   };
@@ -137,8 +147,37 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
   return (
     <>
       <ProgressBar currentStep={currentStep} />
-
     <div className='formulaireAjoutPlante'>
+    {showAlert && (
+        <Alert color="success">
+       Votre Plante a bien été ajoutée, vous pouvez maintenant ajouter une photo !
+      </Alert>
+      )}
+      {showAlert2 && (
+        <Alert color="danger">
+          Votre Plante n'a pas été ajoutée, veuillez réessayer !
+          </Alert>
+      )}
+      {showAlert3 && (
+        <Alert color="success">
+          Votre photo a bien été ajoutée, vous pouvez maintenant ajouter un conseil !
+          </Alert>
+          )}
+      {showAlert4 && (
+        <Alert color="danger">
+          Votre photo n'a pas été ajoutée, veuillez réessayer !
+          </Alert>
+      )}
+      {showAlert5 && (
+        <Alert color="success">
+          Votre conseil a bien été ajouté, vous pouvez maintenant consulter votre profil !
+          </Alert>
+      )}
+      {showAlert6 && (
+        <Alert color="danger">
+          Votre conseil n'a pas été ajouté, veuillez réessayer !
+          </Alert>
+      )}
       {!afficherDeuxiemeFormulaire && !afficherTroisiemeFormulaire &&  (
       <form onSubmit={handleSubmit}>
         <div>
@@ -174,7 +213,7 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
                 </div>
         </div>
         <div className="PlacementButton">
-          <button className="buttonAddPlante" type="submit">
+          <button className="buttonAddPlante btn btn-outline-success my-2 my-sm-0" type="submit">
             Suivant
           </button>
         </div>
@@ -205,7 +244,7 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
           )}
         </div>
         <div className="PlacementButton">
-          <button className="buttonAddPlante" type="submit">Suivant</button>
+          <button className="buttonAddPlante btn btn-outline-success my-2 my-sm-0" type="submit">Suivant</button>
         </div>
         </form>
        
@@ -227,7 +266,7 @@ const AjoutPlante = ({ setShowAccueil,setShowVosPlantes,setShowProfil }) => {
         </div>
         </div>
        <div className="PlacementButton">
-         <button className="buttonAddPlante" type="submit">Envoyer</button>
+         <button className="buttonAddPlante btn btn-outline-success my-2 my-sm-0" type="submit">Envoyer</button>
        </div>
        </form>
       
