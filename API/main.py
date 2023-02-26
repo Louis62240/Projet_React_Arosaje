@@ -99,17 +99,17 @@ async def connexion(email: str, mot_de_passe: str):
         return {"connexion": False}
 
 
-# route test pour la connexion
 @app.get("/connexiontest")
 async def connexion(email: str):
     # Récupération de l'utilisateur correspondant à l'email donné
-    c.execute("SELECT email, mot_de_passe FROM utilisateurs WHERE email=?", (email,))
+    c.execute("SELECT id_utilisateurs, email, mot_de_passe FROM utilisateurs WHERE email=?", (email,))
     result = c.fetchone()
 
     if result is not None :
-        return {"email": result[0], "mot_de_passe": result[1]}
+        return {"id_utilisateur": result[0], "email": result[1], "mot_de_passe": result[2], "connexion": True}
     else:
         return {"connexion": False, "message": "Identifiants incorrects"}
+
 
 #liste toutes les plantes
 @app.get("/plantes")

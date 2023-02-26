@@ -1,7 +1,7 @@
 import axios from 'axios';
-
+import bcrypt from 'bcryptjs';
 const getPlantes = () => {
-  return axios.get("http://127.0.0.1:8000/plantes", {
+  return axios.get("http://127.0.0.1:8000/plantes/sansGardien", {
     headers: {
       'Access-Control-Allow-Origin': 'http://localhost:3000',
       'Content-Type': 'application/json'
@@ -14,6 +14,14 @@ const getPlantes = () => {
     console.log(error);
   });
 };
+
+async function hashPassword(password) {
+  const salt = await bcrypt.genSalt(10);
+  return await bcrypt.hash(password, salt);
+}
+async function checkPassword(password, hashedPassword) {
+  return await bcrypt.compare(password, hashedPassword);
+}
 const getPlanteById = (id) => {
   return axios.get(`http://127.0.0.1:8000/plante/${id}`, {
     headers: {
@@ -84,6 +92,7 @@ export const addConseil = async (idPlante, conseil) => {
   }
 };
 const CHECK_LOGIN_URL = 'http://127.0.0.1:8000/connexion';
+const PASSWORD_LOGIN_URL = 'http://127.0.0.1:8000/connexiontest';
 
 /**
  * Vérifie les identifiants d'un utilisateur en faisant une requête à l'API.
@@ -94,39 +103,59 @@ const CHECK_LOGIN_URL = 'http://127.0.0.1:8000/connexion';
 
  */
 export async function checkConnexion(email, password,onConnect) {
+ try
+ {
+  CheckConnexionPassword(email,password);
+    onConnect();
+    return true;
+ }
+  catch(error)
+  {
+    console.log(error);
+  }
+ 
+  // try {
+    
+  //   // Faire une requête GET à l'API avec les identifiants fournis dans les paramètres d'URL
+  //   const response = await axios.get(`${CHECK_LOGIN_URL}?email=${email}&mot_de_passe=${password}`);
+  //   console.log(response.data)
+  //   if(response.data.connexion===true)
+  //   {
+  //     onConnect();
+  //     const utilisateur =await getUserId(response.data.id_utilisateur);
+  //     localStorage.setItem('utilisateur', JSON.stringify(utilisateur));
+  //     return true;
+  //   }
+  //   else
+  //   {
+  //     return false;
+  //   }
+  // } catch (error) {
+  //   // En cas d'erreur, afficher un message dans la console et retourner false
+  //   console.error(error);
+  //   return false;
+  // }
+}
+
+async function CheckConnexionPassword(email,password) {
   try {
-    // Faire une requête GET à l'API avec les identifiants fournis dans les paramètres d'URL
-    const response = await axios.get(`${CHECK_LOGIN_URL}?email=${email}&mot_de_passe=${password}`);
-    console.log(response.data)
-    if(response.data.connexion===true)
-    {
-      onConnect();
-      const utilisateur =await getUserId(response.data.id_utilisateur);
-      localStorage.setItem('utilisateur', JSON.stringify(utilisateur));
-      return true;
-    }
-    else
-    {
-      return false;
-    }
+    // Faire une requête GET à l'API avec l'email fourni dans les paramètres d'URL
+    const response = await axios.get(`${PASSWORD_LOGIN_URL}?email=${email}`);
+    console.log(response);
+    const passwordHash = response.data.mot_de_passe;
+    const passwordIsValid = await checkPassword(password, passwordHash);
+    const utilisateur =await getUserId(response.data.id_utilisateur);
+    localStorage.setItem('utilisateur', JSON.stringify(utilisateur));
+    return passwordIsValid;
   } catch (error) {
     // En cas d'erreur, afficher un message dans la console et retourner false
     console.error(error);
     return false;
   }
 }
-export const getUserId = async (id_utilisateur) => {
-  const url = `http://127.0.0.1:8000/utilisateur/id/${id_utilisateur}`;
-  try {
-    const response = await axios.get(url);
-    return response.data; // retourne l'id de l'utilisateur
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 const addUser = async (nom, mot_de_passe, telephone, email) => {
-  const url = `http://127.0.0.1:8000/utilisateur?nom=${nom}&mot_de_passe=${mot_de_passe}&telephone=${telephone}&email=${email}`;
+  const hashedPassword = await hashPassword(mot_de_passe);
+  const url = `http://127.0.0.1:8000/utilisateur?nom=${nom}&mot_de_passe=${hashedPassword}&telephone=${telephone}&email=${email}`;
   try {
     const response = await axios.post(url, {
       headers: {
@@ -139,6 +168,18 @@ const addUser = async (nom, mot_de_passe, telephone, email) => {
     console.log(error);
   }
 };
+
+
+export const getUserId = async (id_utilisateur) => {
+  const url = `http://127.0.0.1:8000/utilisateur/id/${id_utilisateur}`;
+  try {
+    const response = await axios.get(url);
+    return response.data; // retourne l'id de l'utilisateur
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
 
 

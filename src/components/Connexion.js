@@ -16,6 +16,11 @@ function Connexion({ onConnect }) {
 
   const handleEmailChange = (event) => setEmail(event.target.value);
   const handlePasswordChange = (event) => setPassword(event.target.value);
+  const handleEmailInscriptionChange = (event) => setEmailInscription(event.target.value);
+  const handleMotDePasseInscriptionChange = (event) => setMotDePasse(event.target.value);
+  const handleNomInscriptionChange = (event) => setNom(event.target.value);
+  const handleTelephoneInscriptionChange = (event) => setTelephone(event.target.value);
+  
 
   // addUser('Louis', 'bebou', '0751663896', 'l.hanquiez22@gmail.com')
   // .then(data => console.log(data))
@@ -36,7 +41,7 @@ function Connexion({ onConnect }) {
   const handleSubmitInscription = async (event) => {
     event.preventDefault();
     try {
-      const result = await addUser(nom, motDePasse, telephone, email);
+      const result = await addUser(nom, motDePasse, telephone, emailInscription);
       alert('Inscription réussie !');
       // Ajouter ici le code pour rediriger vers une autre page ou afficher un message de confirmation
     } catch (error) {
@@ -82,22 +87,22 @@ function Connexion({ onConnect }) {
             <div className="form-group">
               <label className='labelConnexion' htmlFor="nom">Nom :</label><br/>
               <input className='InputConnexion' type="text" id="nom" name="nom" value={nom}
-          onChange={(event) => setNom(event.target.value)} />
+          onChange={handleNomInscriptionChange} />
             </div>
             <div className="form-group">
               <label className='labelConnexion' htmlFor="email">Adresse email :</label><br/>
               <input className='InputConnexion' type="email" id="email" name="email"  value={emailInscription}
-          onChange={(event) => setEmailInscription(event.target.value)}/>
+          onChange={handleEmailInscriptionChange}/>
             </div>
             <div className="form-group">
               <label className='labelConnexion' htmlFor="password">Mot de passe :</label><br/>
               <input className='InputConnexion' type="password" id="password" name="password" value={motDePasse}
-          onChange={(event) => setMotDePasse(event.target.value)}/>
+          onChange={handleMotDePasseInscriptionChange}/>
             </div>
             <div className="form-group">
               <label className='labelConnexion' htmlFor="telephone">Telephone :</label><br/>
               <input className='InputConnexion' type="text" id="telephone" name="telephone"   value={telephone}
-          onChange={(event) => setTelephone(event.target.value)}/>
+          onChange={handleTelephoneInscriptionChange}/>
             </div>
             <br/>
             <button className="btnConnexion" type="submit">S'inscrire</button><br/>
