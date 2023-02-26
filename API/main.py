@@ -331,3 +331,10 @@ async def update_utilisateur(id_utilisateur: int, nom: str = None, mot_de_passe:
 
     conn.commit()
     return {"status": "success", "id_utilisateur": id_utilisateur}
+
+#renvoie tous les id des plantes qui ont pour proprietaire_id, l'id de l'utilisateur
+@app.get("/plantes/proprietaire/{proprietaire_id}")
+async def get_plantes_by_proprietaire(proprietaire_id: int):
+    c.execute("SELECT id_plantes FROM plantes WHERE proprietaire_id=?", (proprietaire_id,))
+    result = c.fetchall()
+    return {"plantes": result}

@@ -87,5 +87,9 @@ DELETE http://127.0.0.1:8000/utilisateur/2
 #modifier un utilisateur selon son id
 @app.put("/utilisateur/{id_utilisateur}")
 PUT http://127.0.0.1:8000/utilisateur/1?nom=nouveau_nom&mot_de_passe=motdepassesecurise&telephone=1234565555&email=email@@@@@@@email.com
+
+#renvoie tous les id des plantes qui ont pour proprietaire_id, l'id de l'utilisateur
+@app.get("/plantes/proprietaire/{proprietaire_id}")
+GET http://127.0.0.1:8000/plantes/proprietaire/1
 ```
 
