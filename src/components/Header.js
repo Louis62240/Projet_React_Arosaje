@@ -3,13 +3,14 @@ import "../assets/css/Header.css";
 import Accueil from "./Accueil.js";
 import VosPlantes from "./VosPlantes.js";
 import Profil from "./Profil.js";
+import WorldMap from "./Map.js";
 import { getUserId } from "../services/api";
 
 const Header = ({ onDisconnect}) => {
   const [showAccueil, setShowAccueil] = useState(true);
   const [showVosPlantes, setShowVosPlantes] = useState(false);
   const [showProfil, setShowProfil] = useState(false);
-
+  const [showMap, setShowMap] = useState(false);
   
   const [nomUser, setNomUser] = useState("");
   const [mailUser, setMailUser] = useState("");
@@ -59,6 +60,7 @@ const Header = ({ onDisconnect}) => {
                     setShowAccueil(true);
                     setShowVosPlantes(false);
                     setShowProfil(false);
+                    setShowMap(false)
                   }}
                 >
                   Accueil
@@ -71,9 +73,23 @@ const Header = ({ onDisconnect}) => {
                     setShowAccueil(false);
                     setShowVosPlantes(true);
                     setShowProfil(false);
+                    setShowMap(false)
                   }}
                 >
                   Vos Plantes
+                </div>
+              </div>
+              <div>
+                <div
+                  className={`NavMenuLink ${showMap ? 'active' : ''}`}
+                  onClick={() => {
+                    setShowAccueil(false);
+                    setShowVosPlantes(false);
+                    setShowProfil(false);
+                    setShowMap(true)
+                  }}
+                >
+                  Carte
                 </div>
               </div>
             </div>
@@ -129,6 +145,7 @@ const Header = ({ onDisconnect}) => {
         {showAccueil && <Accueil/>}
       {showVosPlantes && <VosPlantes />}
       {showProfil && <Profil />}
+      {showMap && <WorldMap />}
       </>
     );
 };

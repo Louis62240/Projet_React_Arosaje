@@ -102,12 +102,14 @@ const PASSWORD_LOGIN_URL = 'http://127.0.0.1:8000/connexiontest';
  *  * @param {function} onConnect - La fonction qui doit être appelée lorsque l'utilisateur est connecté.
 
  */
+
+
 export async function checkConnexion(email, password,onConnect) {
  try
  {
   CheckConnexionPassword(email,password);
-    onConnect();
-    return true;
+  onConnect();
+  return true;
  }
   catch(error)
   {
