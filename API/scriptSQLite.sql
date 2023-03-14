@@ -3,7 +3,9 @@ id_utilisateurs INTEGER PRIMARY KEY AUTOINCREMENT,
 nom VARCHAR(255),
 mot_de_passe VARCHAR(255),
 telephone INT(20),
-email VARCHAR(50) NOT NULL
+email VARCHAR(50) NOT NULL,
+token TEXT,
+date_token DATE
 );
 
 CREATE TABLE plantes (
