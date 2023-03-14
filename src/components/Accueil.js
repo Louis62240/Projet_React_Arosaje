@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import { Form } from "react-bootstrap";
 import AjoutPlante from "./AjoutPlante";
 import "../assets/css/Accueil.css";
-import {getPlantes,getPlanteById} from '../services/api'
+import {getPlantes,getPlanteById,updatePlanteGardien} from '../services/api'
 
 const Accueil = () => {
   const [plantes, setPlantes] = useState([]);
@@ -51,6 +51,8 @@ const Accueil = () => {
           console.log(error);
         });
     };
+
+
 
     const recupLocalisation = (plante) => {
       // plante est un tableau contenant les informations de la plante
@@ -106,7 +108,11 @@ const Accueil = () => {
   const mapClose = () => setActive(false);
   const mapShow = () => setActive(true);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false)
+    updatePlanteGardien(21,5);
+  };
+
   const handleShow = () => setShow(true);
 
   const filteredPlantes = plantes.filter(
@@ -161,7 +167,7 @@ const Accueil = () => {
           </button>
       <div className="card-body">
         <h5 className="card-title">{plante.nom_plante}</h5>
-          
+        <div>
         <p className="description card-text">Description : {plante.description_plante}</p>
         <button
           className="buttonEnSavoirPlus btn btn-outline-success my-2 my-sm-10"
@@ -173,6 +179,7 @@ const Accueil = () => {
         >
           En savoir plus
         </button>
+        </div>
       </div>
     </div>
   ))}
@@ -197,7 +204,7 @@ const Accueil = () => {
               <Button variant="secondary" onClick={handleClose}>
                 Fermer
               </Button>
-              <Button style={{background:'#28a745 '}} onClick={handleClose}>
+              <Button style={{background:'#28a745 '}} onClick={handleClose()}>
                 Garder cette plante
               </Button>
             </Modal.Footer>

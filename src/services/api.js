@@ -174,3 +174,33 @@ export const getUserId = async (id_utilisateur) => {
   }
 };
 
+export const updatePlanteGardien = async (idPlante, gardiensId) => {
+  const url = `http://127.0.0.1:8000/plante/gardien/${idPlante}?gardiens_id=${gardiensId}`;
+  try {
+    const response = await axios.put(url, {}, {
+      headers: {
+        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log(response.data); // affiche les données dans la console
+    return response.data; // retourne les données sous forme d'objet JSON
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getPlantesByProprietaire = async (proprietaireId) => {
+  const url = `http://127.0.0.1:8000/plantes/proprietaire/${proprietaireId}`;
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log(response.data); // affiche les données dans la console
+    return response.data; // retourne les données sous forme d'array
+  } catch (error) {
+    console.log(error);
+  }
+};

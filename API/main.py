@@ -332,9 +332,34 @@ async def update_utilisateur(id_utilisateur: int, nom: str = None, mot_de_passe:
     conn.commit()
     return {"status": "success", "id_utilisateur": id_utilisateur}
 
-#renvoie tous les id des plantes qui ont pour proprietaire_id, l'id de l'utilisateur
+#renvoie toutes les informations de toutes les plantes d'un propriétaire
 @app.get("/plantes/proprietaire/{proprietaire_id}")
 async def get_plantes_by_proprietaire(proprietaire_id: int):
-    c.execute("SELECT id_plantes FROM plantes WHERE proprietaire_id=?", (proprietaire_id,))
-    result = c.fetchall()
-    return {"plantes": result}
+    c.execute("""
+        SELECT 
+            plantes.*,
+            plante_photos.photo_url,
+            GROUP_CONCAT(conseil_plante.conseil, '; ') as conseils
+        FROM 
+            plantes
+            LEFT JOIN plante_photos ON plantes.id_plantes = plante_photos.id_plantes
+            LEFT JOIN conseil_plante ON plantes.id_plantes = conseil_plante.id_plantes
+        WHERE 
+            plantes.proprietaire_id=?
+        GROUP BY plantes.id_plantes;
+    """, (proprietaire_id,))
+    plantes = c.fetchall()
+    response = []
+    for plante in plantes:
+        plante_dict = {
+            "id_plante": plante[0],
+            "proprietaire_id": plante[1],
+            "gardiens_id": plante[2],
+            "nom_plante": plante[3],
+            "description_plante": plante[4],
+            "localisation": plante[5],
+            "photo_url": plante[6],
+            "conseils": plante[7]
+        }
+        response.append(plante_dict)
+    return response
