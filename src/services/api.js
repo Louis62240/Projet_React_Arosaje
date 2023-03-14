@@ -206,3 +206,18 @@ export const getPlantesByProprietaire = async (proprietaireId) => {
     console.log(error);
   }
 };
+export const getPlantesByVille = async (ville) => {
+  const url = `http://127.0.0.1:8000/plantes/ville/${ville}`;
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log(response.data); // affiche les données dans la console
+    return response.data; // retourne les données sous forme d'array
+  } catch (error) {
+    console.log(error);
+  }
+};

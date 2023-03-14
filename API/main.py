@@ -363,3 +363,35 @@ async def get_plantes_by_proprietaire(proprietaire_id: int):
         }
         response.append(plante_dict)
     return response
+
+#Récupère les plantes selon la ville
+@app.get("/plantes/ville/{ville}")
+async def get_plantes_by_ville(ville: str):
+    c.execute("""
+        SELECT 
+            plantes.*,
+            plante_photos.photo_url,
+            GROUP_CONCAT(conseil_plante.conseil, '; ') as conseils
+        FROM 
+            plantes
+            LEFT JOIN plante_photos ON plantes.id_plantes = plante_photos.id_plantes
+            LEFT JOIN conseil_plante ON plantes.id_plantes = conseil_plante.id_plantes
+        WHERE 
+            plantes.localisation LIKE ?
+        GROUP BY plantes.id_plantes;
+    """, (f"%{ville}%",))
+    plantes = c.fetchall()
+    response = []
+    for plante in plantes:
+        plante_dict = {
+            "id_plante": plante[0],
+            "proprietaire_id": plante[1],
+            "gardiens_id": plante[2],
+            "nom_plante": plante[3],
+            "description_plante": plante[4],
+            "localisation": plante[5],
+            "photo_url": plante[6],
+            "conseils": plante[7]
+        }
+        response.append(plante_dict)
+    return response
