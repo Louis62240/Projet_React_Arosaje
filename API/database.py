@@ -1,5 +1,5 @@
 import sqlite3 as sq
-conn = sq.connect("arosa_je.db")
+conn = sq.connect("arosa_je.db2")
 
 c = conn.cursor()
 c.execute("""CREATE TABLE IF NOT EXISTS utilisateurs (
@@ -7,7 +7,9 @@ c.execute("""CREATE TABLE IF NOT EXISTS utilisateurs (
                 nom VARCHAR(255),
                 mot_de_passe VARCHAR(255),
                 telephone INT(20),
-                email VARCHAR(50) NOT NULL
+                email VARCHAR(50) NOT NULL,
+                token TEXT,
+                token_date DATE
                 )""")
 
 c.execute("""CREATE TABLE IF NOT EXISTS plantes (
