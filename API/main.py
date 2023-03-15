@@ -214,6 +214,7 @@ async def get_plante_info(id_plante: int):
         conseil = ""
     
     return {
+        "id proprietaire" : proprietaire_id,
         "nom_proprietaire": nom_proprietaire,
         "nom_gardien": nom_gardien,
         "nom_plante": nom_plante,
