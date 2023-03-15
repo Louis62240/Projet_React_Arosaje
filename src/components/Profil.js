@@ -15,6 +15,7 @@ const Profil = () => {
       setMailUser(utilisateur.utilisateur[4]);
       setTelUser(utilisateur.utilisateur[3]);
       setUserId(utilisateur.utilisateur[0]);
+      
     }
   }, []);
 

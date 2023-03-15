@@ -24,7 +24,8 @@ function WorldMap() {
   const [PhotoPlanteSelected, setPhotoPlanteSelected] = useState("");
   const [ville, setVille] = useState("");
  const [markerLoading, setMarkerLoading] = useState(false);
-  useEffect(() => {
+  
+ useEffect(() => {
     getPlantes().then((data) => {
       setPlantes(data);
       console.log("Plantes");
@@ -32,9 +33,6 @@ function WorldMap() {
     });
   }, []);
 
-  function handleMoreInfoClick() {
-    setShowMoreInfo(true);
-  }
   function handleMarkerClick(plante) {
     setSelectedCity(plante.localisation);
     getPlantesByVille(plante.localisation)
@@ -127,7 +125,7 @@ function WorldMap() {
     </Marker>
   )
   );
-
+                console.log('Fin du chargement')
   return (
     <div className="animated-div">
       <div style={{ display: "flex" }}>
@@ -150,6 +148,8 @@ function WorldMap() {
           {markers}
         </MapContainer>
       </div>
+      <div className="animated-div">
+
       {showMoreInfo && (
         <div style={{marginTop:'20px'}}>
                       <div className="PlanteBrique">
@@ -192,10 +192,11 @@ function WorldMap() {
               </div>
             </div>
           ))}
+          </div>
         </div>
-        </div>
+        
       )}
-      
+      </div>
     </div>
   );
 }
