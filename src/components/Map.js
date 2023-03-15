@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "../assets/css/Map.css";
-import { getPlantes, getPlantesByVille, getPlanteById } from "../services/api";
-
+import { getPlantes, getPlantesByVille, getPlanteById,updatePlanteGardien } from "../services/api";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 const positionLille = [50.62925, 3.057256]; // position par défaut pour centrer la carte
 
 function WorldMap() {
@@ -24,7 +25,13 @@ function WorldMap() {
   const [PhotoPlanteSelected, setPhotoPlanteSelected] = useState("");
   const [ville, setVille] = useState("");
  const [markerLoading, setMarkerLoading] = useState(false);
-  
+ const [show, setShow] = useState(false);
+ const mapClose = () => setActive(false);
+ const [mapURL, setMapURL] = useState("");
+ const [active, setActive] = useState(false);
+ const [idPlanteSelected, setIdPlanteSelected] = useState("");
+const [LoaderMap , setLoaderMap] = useState(false);
+console.log("LoaderMap : " + LoaderMap)
  useEffect(() => {
     getPlantes().then((data) => {
       setPlantes(data);
@@ -32,6 +39,15 @@ function WorldMap() {
       console.log(data);
     });
   }, []);
+  const addGardien = () => {
+    // plante est un tableau contenant les informations de la plante
+    const utilisateur = JSON.parse(localStorage.getItem('utilisateur'));
+    console.log('Id plante :'+ idPlanteSelected)
+    updatePlanteGardien(idPlanteSelected,utilisateur.utilisateur[0]);
+    handleClose();
+  };
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   function handleMarkerClick(plante) {
     setSelectedCity(plante.localisation);
@@ -55,6 +71,7 @@ function WorldMap() {
       .then((data) => {
         // Mettre à jour les variables d'état avec les informations de la plante sélectionnée
         console.log(data);
+        setIdPlanteSelected(id);
         setPhotoPlanteSelected(data.photo_url);
         setPlanteNameSelected(data.nom_plante);
         setPlanteDescriptionSelected(data.description_plante);
@@ -62,7 +79,7 @@ function WorldMap() {
         setPlanteConseilSelected(data.conseil);
         setPlanteProprietaire(data.nom_proprietaire);
         setVille(data.localisation);
-        // handleShow();
+        handleShow();
       })
       .catch((error) => {
         console.log(error);
@@ -93,7 +110,14 @@ function WorldMap() {
       </div>
     );
   }
-
+  if(positions.length > 0)
+  {
+    console.log("positions : " + positions.length)
+    if(LoaderMap == false)
+    {
+    setLoaderMap(true);
+    }
+  }
   if (error) {
     return <p>Error: {error}</p>;
   }
@@ -125,10 +149,11 @@ function WorldMap() {
     </Marker>
   )
   );
-                console.log('Fin du chargement')
+                
   return (
     <div className="animated-div">
       <div style={{ display: "flex" }}>
+        
         <MapContainer
           style={{
             height: "600px",
@@ -141,6 +166,9 @@ function WorldMap() {
           zoom={6}
           scrollWheelZoom={false}
         >
+          {LoaderMap && <span class="loader"></span>}
+          
+        
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -148,14 +176,14 @@ function WorldMap() {
           {markers}
         </MapContainer>
       </div>
-      <div className="animated-div">
+      
 
-      {showMoreInfo && (
+      {showMoreInfo && (<div className="animated-div">
         <div style={{marginTop:'20px'}}>
                       <div className="PlanteBrique">
 
           {selectedPlante.plantes.map((plante) => (
-            <div className="PlanteBriqueInside card" style={{ width: "18rem" }}>
+            <div className="PlanteBriqueInside card" style={{ width: "18rem",height:'25rem' }}>
               <img
                 src={
                   plante.photo_url
@@ -193,10 +221,79 @@ function WorldMap() {
             </div>
           ))}
           </div>
+           {/* Affiche un pop up avec les informations sur la plante */}
+           <Modal show={show} onHide={handleClose}>
+              <Modal.Header closeButton>
+                <Modal.Title>{PlanteNameSelected}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <img
+                  src={
+                    PhotoPlanteSelected
+                      ? `data:image/jpeg;base64,${PhotoPlanteSelected}`
+                      : require("../assets/img/plante.jpg")
+                  }
+                  class="card-img top"
+                />
+                Proprietaire : {PlanteProprietaire}
+                <br />
+                <br />
+                Description : {PlanteDescriptionSelected}
+                <br />
+                <br />
+                Localisation : {PlanteLocalisationSelected}
+                <br />
+                <br />
+                Conseil : {PlanteConseilSelected}
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                  Fermer
+                </Button>
+                <Button
+                  style={{ background: "#28a745 " }}
+                  onClick={addGardien}
+                >
+                  Garder cette plante
+                </Button>
+              </Modal.Footer>
+            </Modal>
+
+            {/*Affiche un pop up avec les informations sur la localisation */}
+            <Modal show={active} onHide={mapClose}>
+              <Modal.Header closeButton>
+                <Modal.Title>{ville}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                Localisation : {ville}
+                <br />
+                <div
+                  className="map-container"
+                  onChange={(event) => setMapURL(event.target.value)}
+                >
+                  {mapURL ? (
+                    <iframe
+                      width="100%"
+                      height="300px"
+                      src={mapURL}
+                      title="Ville Map"
+                      onChange={(event) => setMapURL(event.target.value)}
+                    />
+                  ) : (
+                    <p>Loading...</p>
+                  )}
+                </div>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={mapClose}>
+                  Fermer
+                </Button>
+              </Modal.Footer>
+            </Modal>
         </div>
-        
+        </div>
       )}
-      </div>
+      
     </div>
   );
 }

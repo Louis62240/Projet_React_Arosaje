@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { Form } from "react-bootstrap";
 import AjoutPlante from "./AjoutPlante";
 import "../assets/css/Accueil.css";
-import { getPlantes, getPlanteById } from "../services/api";
+import { getPlantes, getPlanteById,updatePlanteGardien } from "../services/api";
 
 const Accueil = () => {
   const [plantes, setPlantes] = useState([]);
@@ -26,6 +25,7 @@ const Accueil = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [PhotoPlanteSelected, setPhotoPlanteSelected] = useState("");
   const [ville, setVille] = useState("");
+  const [idPlanteSelected, setIdPlanteSelected] = useState("");
 
   const [mapURL, setMapURL] = useState("");
 
@@ -36,6 +36,7 @@ const Accueil = () => {
       .then((data) => {
         // Mettre à jour les variables d'état avec les informations de la plante sélectionnée
         console.log(data);
+        setIdPlanteSelected(id);
         setPhotoPlanteSelected(data.photo_url);
         setPlanteNameSelected(data.nom_plante);
         setPlanteDescriptionSelected(data.description_plante);
@@ -48,6 +49,13 @@ const Accueil = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+  const addGardien = () => {
+    // plante est un tableau contenant les informations de la plante
+    const utilisateur = JSON.parse(localStorage.getItem('utilisateur'));
+    console.log('Id plante :'+ idPlanteSelected)
+    updatePlanteGardien(idPlanteSelected,utilisateur.utilisateur[0]);
+    handleClose();
   };
 
   const recupLocalisation = (plante) => {
@@ -228,7 +236,7 @@ const Accueil = () => {
                 </Button>
                 <Button
                   style={{ background: "#28a745 " }}
-                  onClick={handleClose}
+                  onClick={addGardien}
                 >
                   Garder cette plante
                 </Button>
