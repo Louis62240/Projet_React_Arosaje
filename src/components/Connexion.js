@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { checkConnexion , addUser} from '../services/api';
 import '../assets/css/Connexion.css';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 function Connexion({ onConnect }) {
   const [email, setEmail] = useState('');
@@ -26,7 +25,6 @@ function Connexion({ onConnect }) {
   const toggleAfficherMotDePasse = () => {
     setAfficherMotDePasse(!afficherMotDePasse);
   };
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();

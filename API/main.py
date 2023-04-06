@@ -6,6 +6,11 @@ import sqlite3worker
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from dataclasses import dataclass
+from jwt import encode
+from datetime import datetime, timedelta
+import secrets
+
+SECRET_KEY = secrets.token_hex(32)
 
 @dataclass
 class Plante_photo :
@@ -105,11 +110,23 @@ async def connexion(email: str):
     c.execute("SELECT id_utilisateurs, email, mot_de_passe FROM utilisateurs WHERE email=?", (email,))
     result = c.fetchone()
 
-    if result is not None :
-        return {"id_utilisateur": result[0], "email": result[1], "mot_de_passe": result[2], "connexion": True}
+    if result is not None:
+        # Créez un token avec les informations de l'utilisateur
+        token_data = {
+            "id_utilisateur": result[0],
+            "exp": datetime.utcnow() + timedelta(hours=1) # Définissez une durée d'expiration pour le token, ici 1 heure
+        }
+        token = encode(token_data, SECRET_KEY, algorithm="HS256")
+
+        return {
+            "id_utilisateur": result[0],
+            "email": result[1],
+            "mot_de_passe": result[2],
+            "connexion": True,
+            "token": token # Ajoutez le token à la réponse
+        }
     else:
         return {"connexion": False, "message": "Identifiants incorrects"}
-
 
 #liste toutes les plantes
 @app.get("/plantes")

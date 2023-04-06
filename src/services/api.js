@@ -121,11 +121,11 @@ export async function CheckConnexionPassword(email,password) {
   try {
     // Faire une requête GET à l'API avec l'email fourni dans les paramètres d'URL
     const response = await axios.get(`${PASSWORD_LOGIN_URL}?email=${email}`);
-    console.log(response);
     const passwordHash = response.data.mot_de_passe;
     const passwordIsValid = await checkPassword(password, passwordHash);
     const utilisateur =await getUserId(response.data.id_utilisateur);
     localStorage.setItem('utilisateur', JSON.stringify(utilisateur));
+    localStorage.setItem('token', response.data.token);
     return passwordIsValid;
   } catch (error) {
     // En cas d'erreur, afficher un message dans la console et retourner false
