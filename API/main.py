@@ -340,8 +340,6 @@ async def get_plantes_by_proprietaire(proprietaire_id: int):
     result = c.fetchall()
     return {"plantes": result}
 
-
-
 @app.post("/conversation/{id_utilisateur_1}/{id_utilisateur_2}")
 async def add_conversation(id_utilisateur_1: int, id_utilisateur_2: int):
     # Vérifier si la conversation existe déjà
@@ -355,10 +353,6 @@ async def add_conversation(id_utilisateur_1: int, id_utilisateur_2: int):
     conn.commit()
 
     return {"status": "success", "id": c.lastrowid}
-
-
-
-
 
 @app.post("/message")
 async def add_message(id_conversation: int, id_envoyeur: int, id_utilisateur_1: int, id_utilisateur_2: int):
@@ -381,5 +375,42 @@ async def add_message(id_conversation: int, id_envoyeur: int, id_utilisateur_1: 
     conn.commit()
 
     return {"status": "success", "id": c.lastrowid}
+
+
+@app.get("/conversations/{id_utilisateur}")
+async def get_conversations(id_utilisateur: int):
+    # Récupérer toutes les conversations dans lesquelles l'utilisateur est l'utilisateur 1 ou 2
+    c.execute("SELECT id_conversation, id_utilisateur_1, id_utilisateur2 FROM conversation WHERE id_utilisateur_1 = ? OR id_utilisateur2 = ?", (id_utilisateur, id_utilisateur))
+    result = c.fetchall()
+    
+    conversations = []
+    for row in result:
+        conversation = {
+            "id_conversation": row[0],
+            "id_utilisateur_1": row[1],
+            "id_utilisateur_2": row[2]
+        }
+        conversations.append(conversation)
+    
+    return {"conversations": conversations}
+
+@app.get("/conversations/{id_conversation}/messages")
+async def get_conversation_messages(id_conversation: int):
+    # Récupérer tous les messages de la conversation
+    c.execute("SELECT id_message, id_conversation, id_envoyeur, date_message FROM message WHERE id_conversation = ? ORDER BY date_message ASC", (id_conversation,))
+    result = c.fetchall()
+
+    messages = []
+    for row in result:
+        message = {
+            "id_message": row[0],
+            "id_conversation": row[1],
+            "id_envoyeur": row[2],
+            "date_message": row[3]
+        }
+        messages.append(message)
+
+    return {"messages": messages}
+
 
 

@@ -99,5 +99,13 @@ POST http://127.0.0.1:8000/conversation/1/2
 #ajoute un message dans la bdd en vérifiant que la conv existe, et qu'elle appartient bien aux 2 utiilisateurs renseignés
 @app.post("/message")
 POST http://127.0.0.1:8000/message?id_conversation=1&id_envoyeur=1&id_utilisateur_1=1&id_utilisateur_2=2
+
+#récupérer toutes les conversations de l'utilisateur donné
+@app.get("/conversations/{id_utilisateur}")
+GET http://127.0.0.1:8000/conversations/1
+
+#récupérer tous les messages de la conversation donnée
+@app.get("/conversations/{id_conversation}/messages")
+GET http://127.0.0.1:8000/conversations/1/messages
 ```
 
