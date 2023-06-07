@@ -1,0 +1,66 @@
+.messagerie {
+    background-color: #fff;
+    color: #006400;
+    font-size: 1.2rem;
+    padding: 1em;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-right:5%;
+    margin-left:5%;
+  }
+  
+  .recipient-select, .message-input, .message-submit {
+    margin: 0.5em 0;
+  }
+  
+  .message-list {
+    border-top: 1px solid #006400;
+    margin-top: 1em;
+    padding-top: 1em;
+  }
+  
+  .message {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 0.5em 0;
+  }
+  
+  .message:last-child {
+    border-bottom: none;
+  }
+  
+  .pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1em;
+  }
+  
+  .message-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .message-input {
+    flex-grow: 1;
+    margin-right: 1em;
+  }
+  
+  .message-submit {
+    background-color: #006400;
+    color: #fff;
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .message-submit:hover {
+    background-color: #004c00;
+  }
+  
+  .message-submit:active {
+    background-color: #003300;
+  }
+  

@@ -4,6 +4,7 @@ import Accueil from "./Accueil.js";
 import VosPlantes from "./VosPlantes.js";
 import Profil from "./Profil.js";
 import WorldMap from "./Map.js";
+import Messagerie from "./Messagerie.js"; 
 import { getUserId } from "../services/api";
 
 const Header = ({ onDisconnect}) => {
@@ -11,7 +12,8 @@ const Header = ({ onDisconnect}) => {
   const [showVosPlantes, setShowVosPlantes] = useState(false);
   const [showProfil, setShowProfil] = useState(false);
   const [showMap, setShowMap] = useState(false);
-  
+  const [showMessagerie, setShowMessagerie] = useState(false); 
+
   const [nomUser, setNomUser] = useState("");
   const [mailUser, setMailUser] = useState("");
   const [telUser, setTelUser] = useState("");
@@ -92,6 +94,20 @@ const Header = ({ onDisconnect}) => {
                   Carte
                 </div>
               </div>
+              <div>
+          <div
+            className={`NavMenuLink ${showMessagerie ? 'active' : ''}`}
+            onClick={() => {
+              setShowAccueil(false);
+              setShowVosPlantes(false);
+              setShowProfil(false);
+              setShowMap(false);
+              setShowMessagerie(true);
+            }}
+          >
+            Messagerie
+          </div>
+        </div>
             </div>
             <div className="PlacementUser">
               <p className="PlacementElementUser">{nomUser}</p>
@@ -146,6 +162,7 @@ const Header = ({ onDisconnect}) => {
       {showVosPlantes && <VosPlantes />}
       {showProfil && <Profil />}
       {showMap && <WorldMap />}
+      {showMessagerie && <Messagerie />}
       </>
     );
 };
