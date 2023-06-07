@@ -4,7 +4,6 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -49,8 +48,8 @@ jobs:
 
     - name: Deactivate virtual environment
       run: |
-      echo "Deactivating virtual environment..."
-      deactivate || true
+        echo "Deactivating virtual environment..."
+        deactivate || true
 
     - name: Run Python tests with coverage
       run: coverage run -m unittest discover API
