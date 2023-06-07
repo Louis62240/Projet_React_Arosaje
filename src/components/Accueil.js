@@ -115,6 +115,7 @@ const Accueil = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const SendMessage = () => {};
   const filteredPlantes = plantes.filter((plante) =>
     plante.nom_plante.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -239,6 +240,9 @@ const Accueil = () => {
                   onClick={addGardien}
                 >
                   Garder cette plante
+                </Button>
+                <Button variant="primary" onClick={SendMessage}>
+                  Envoyer un message
                 </Button>
               </Modal.Footer>
             </Modal>
