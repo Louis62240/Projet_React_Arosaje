@@ -51,6 +51,9 @@ jobs:
         echo "Deactivating virtual environment..."
         deactivate || true
 
+    - name: Install coverage
+      run: pip install coverage
+
     - name: Run Python tests with coverage
       run: coverage run -m unittest discover API
 
