@@ -61,7 +61,7 @@ jobs:
       run: coverage html --directory=coverage-report
 
     - name: Build Docker image
-      run: docker build -t my-docker-image .
+      run: docker build -t my-docker-image -f Dockerfile-API .
 
     - name: Run Docker container and execute tests
       run: docker run my-docker-image python -m unittest discover API
