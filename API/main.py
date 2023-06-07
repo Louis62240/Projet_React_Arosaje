@@ -6,11 +6,7 @@ import sqlite3worker
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from dataclasses import dataclass
-from jwt import encode
-from datetime import datetime, timedelta
-import secrets
-
-SECRET_KEY = secrets.token_hex(32)
+import datetime
 
 @dataclass
 class Plante_photo :
@@ -104,29 +100,17 @@ async def connexion(email: str, mot_de_passe: str):
         return {"connexion": False}
 
 
-@app.get("/connexiontest")
-async def connexion(email: str):
-    # Récupération de l'utilisateur correspondant à l'email donné
-    c.execute("SELECT id_utilisateurs, email, mot_de_passe FROM utilisateurs WHERE email=?", (email,))
-    result = c.fetchone()
+# @app.get("/connexiontest")
+# async def connexion(email: str):
+#     # Récupération de l'utilisateur correspondant à l'email donné
+#     c.execute("SELECT id_utilisateurs, email, mot_de_passe FROM utilisateurs WHERE email=?", (email,))
+#     result = c.fetchone()
 
-    if result is not None:
-        # Créez un token avec les informations de l'utilisateur
-        token_data = {
-            "id_utilisateur": result[0],
-            "exp": datetime.utcnow() + timedelta(hours=1) # Définissez une durée d'expiration pour le token, ici 1 heure
-        }
-        token = encode(token_data, SECRET_KEY, algorithm="HS256")
+#     if result is not None :
+#         return {"id_utilisateur": result[0], "email": result[1], "mot_de_passe": result[2], "connexion": True}
+#     else:
+#         return {"connexion": False, "message": "Identifiants incorrects"}
 
-        return {
-            "id_utilisateur": result[0],
-            "email": result[1],
-            "mot_de_passe": result[2],
-            "connexion": True,
-            "token": token # Ajoutez le token à la réponse
-        }
-    else:
-        return {"connexion": False, "message": "Identifiants incorrects"}
 
 #liste toutes les plantes
 @app.get("/plantes")
@@ -231,7 +215,6 @@ async def get_plante_info(id_plante: int):
         conseil = ""
     
     return {
-        "id proprietaire" : proprietaire_id,
         "nom_proprietaire": nom_proprietaire,
         "nom_gardien": nom_gardien,
         "nom_plante": nom_plante,
@@ -350,66 +333,53 @@ async def update_utilisateur(id_utilisateur: int, nom: str = None, mot_de_passe:
     conn.commit()
     return {"status": "success", "id_utilisateur": id_utilisateur}
 
-#renvoie toutes les informations de toutes les plantes d'un propriétaire
+#renvoie tous les id des plantes qui ont pour proprietaire_id, l'id de l'utilisateur
 @app.get("/plantes/proprietaire/{proprietaire_id}")
 async def get_plantes_by_proprietaire(proprietaire_id: int):
-    c.execute("""
-        SELECT 
-            plantes.*,
-            plante_photos.photo_url,
-            GROUP_CONCAT(conseil_plante.conseil, '; ') as conseils
-        FROM 
-            plantes
-            LEFT JOIN plante_photos ON plantes.id_plantes = plante_photos.id_plantes
-            LEFT JOIN conseil_plante ON plantes.id_plantes = conseil_plante.id_plantes
-        WHERE 
-            plantes.proprietaire_id=?
-        GROUP BY plantes.id_plantes;
-    """, (proprietaire_id,))
-    plantes = c.fetchall()
-    response = []
-    for plante in plantes:
-        plante_dict = {
-            "id_plante": plante[0],
-            "proprietaire_id": plante[1],
-            "gardiens_id": plante[2],
-            "nom_plante": plante[3],
-            "description_plante": plante[4],
-            "localisation": plante[5],
-            "photo_url": plante[6],
-            "conseils": plante[7]
-        }
-        response.append(plante_dict)
-    return response
+    c.execute("SELECT id_plantes FROM plantes WHERE proprietaire_id=?", (proprietaire_id,))
+    result = c.fetchall()
+    return {"plantes": result}
 
-#Récupère les plantes selon la ville
-@app.get("/plantes/ville/{ville}")
-async def get_plantes_by_ville(ville: str):
-    c.execute("""
-        SELECT 
-            plantes.*,
-            plante_photos.photo_url,
-            GROUP_CONCAT(conseil_plante.conseil, '; ') as conseils
-        FROM 
-            plantes
-            LEFT JOIN plante_photos ON plantes.id_plantes = plante_photos.id_plantes
-            LEFT JOIN conseil_plante ON plantes.id_plantes = conseil_plante.id_plantes
-        WHERE 
-            plantes.localisation LIKE ?
-        GROUP BY plantes.id_plantes;
-    """, (f"%{ville}%",))
-    plantes = c.fetchall()
-    response = []
-    for plante in plantes:
-        plante_dict = {
-            "id_plante": plante[0],
-            "proprietaire_id": plante[1],
-            "gardiens_id": plante[2],
-            "nom_plante": plante[3],
-            "description_plante": plante[4],
-            "localisation": plante[5],
-            "photo_url": plante[6],
-            "conseils": plante[7]
-        }
-        response.append(plante_dict)
-    return response
+
+
+@app.post("/conversation/{id_utilisateur_1}/{id_utilisateur_2}")
+async def add_conversation(id_utilisateur_1: int, id_utilisateur_2: int):
+    # Vérifier si la conversation existe déjà
+    c.execute("SELECT id_conversation FROM conversation WHERE id_utilisateur_1 = ? AND id_utilisateur2 = ?", (id_utilisateur_1, id_utilisateur_2))
+    result = c.fetchone()
+    if result:
+        return {"status": "error", "message": "La conversation existe déjà."}
+
+    # Insérer la nouvelle conversation dans la table conversation
+    c.execute("INSERT INTO conversation (id_utilisateur_1, id_utilisateur2) VALUES (?, ?)", (id_utilisateur_1, id_utilisateur_2))
+    conn.commit()
+
+    return {"status": "success", "id": c.lastrowid}
+
+
+
+
+
+@app.post("/message")
+async def add_message(id_conversation: int, id_envoyeur: int, id_utilisateur_1: int, id_utilisateur_2: int):
+    # Vérifier si la conversation existe déjà
+    c.execute("SELECT id_conversation FROM conversation WHERE id_conversation = ? AND id_utilisateur_1 = ? AND id_utilisateur2 = ?", (id_conversation, id_utilisateur_1, id_utilisateur_2))
+    result = c.fetchone()
+    if not result:
+        return {"status": "error", "message": "La conversation n'existe pas ou vous n'êtes pas les propriétaires de cette conversation."}
+
+    # Vérifier si l'id envoyeur correspond à l'utilisateur 1 ou 2
+    if id_envoyeur != id_utilisateur_1 and id_envoyeur != id_utilisateur_2:
+        return {"status": "error", "message": "L'id envoyeur ne correspond à aucun des utilisateurs de la conversation."}
+
+    # Récupérer la date et heure actuelle
+    date_message = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Insérer le message dans la table message
+    c.execute("INSERT INTO message (id_conversation, id_envoyeur, date_message) VALUES (?, ?, ?)",
+    (id_conversation, id_envoyeur, date_message))
+    conn.commit()
+
+    return {"status": "success", "id": c.lastrowid}
+
+

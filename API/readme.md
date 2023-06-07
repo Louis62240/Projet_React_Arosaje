@@ -91,5 +91,13 @@ PUT http://127.0.0.1:8000/utilisateur/1?nom=nouveau_nom&mot_de_passe=motdepasses
 #renvoie tous les id des plantes qui ont pour proprietaire_id, l'id de l'utilisateur
 @app.get("/plantes/proprietaire/{proprietaire_id}")
 GET http://127.0.0.1:8000/plantes/proprietaire/1
+
+#créé une conversation entre 2 utilisateurs
+@app.post("/conversation/{id_utilisateur_1}/{id_utilisateur_2}")
+POST http://127.0.0.1:8000/conversation/1/2
+
+#ajoute un message dans la bdd en vérifiant que la conv existe, et qu'elle appartient bien aux 2 utiilisateurs renseignés
+@app.post("/message")
+POST http://127.0.0.1:8000/message?id_conversation=1&id_envoyeur=1&id_utilisateur_1=1&id_utilisateur_2=2
 ```
 

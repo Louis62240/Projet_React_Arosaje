@@ -1,6 +1,7 @@
 import requests
 from main import app
 
+
 def test_read_main():
     response = requests.get("http://127.0.0.1:8000/")
     assert response.status_code == 200
@@ -38,7 +39,7 @@ def test_connexion():
     assert response.status_code == 200
     assert response.json()["connexion"] is True
 
-def test_connexion():
+def test_connexiontest():
     payload = {
         "email": "mon.email@email.com"
     }
@@ -56,40 +57,3 @@ def test_get_plantes_sans_gardien():
     response = requests.get("http://127.0.0.1:8000/plantes/sansGardien")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
-
-def test_get_plante_by_id():
-    response = requests.get("http://127.0.0.1:8000/plante/21")
-    assert response.status_code == 200
-
-def test_get_all_users():
-    response = requests.get("http://127.0.0.1:8000/utilisateurs")
-    assert response.status_code == 200
-
-def test_get_id_user_by_name():
-    response = requests.get("http://127.0.0.1:8000/utilisateur/nom/Mon_nom")
-    assert response.status_code == 200
-
-def test_get_all_of_user_by_id():
-    response = requests.get("http://127.0.0.1:8000/utilisateur/id/1")
-    assert response.status_code == 200
-
-def test_modifier_gardien():
-    response = requests.put("http://127.0.0.1:8000/plante/gardien/21?gardiens_id=2")
-    assert response.status_code == 200
-
-def test_delete_plante_by_id():
-    response = requests.delete("http://127.0.0.1:8000/plante/1")
-    assert response.status_code == 200
-
-def test_delete_user_by_id():
-    response = requests.delete("http://127.0.0.1:8000/utilisateur/1")
-    assert response.status_code == 200
-
-def test_modifier_user_by_id():
-    response = requests.put("http://127.0.0.1:8000/utilisateur/1?nom=nouveau_nom&mot_de_passe=motdepassesecurise&telephone=1234565555&email=email@@@@@@@email.com")
-    assert response.status_code == 200
-
-def test_get_plante_de_utilisateur_by_id():
-    response = requests.get("http://127.0.0.1:8000/plantes/proprietaire/1")
-    assert response.status_code == 200
-
