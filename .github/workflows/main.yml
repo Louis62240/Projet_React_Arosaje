@@ -33,4 +33,4 @@ jobs:
         pip install -r API/requirements.txt
 
     - name: Run Python tests
-      run: python -m unittest discover apis
+      run: python -m unittest discover api
