@@ -34,3 +34,29 @@ jobs:
 
     - name: Run Python tests
       run: python -m unittest discover API
+
+    - name: Create virtual environment
+      run: python -m venv venv
+    
+    - name: Activate virtual environment
+      run: source venv/bin/activate
+    
+    - name: Install Python dependencies
+      run: pip install -r API/requirements.txt
+    
+    - name: Run Python tests
+      run: python -m unittest discover API
+    
+    - name: Deactivate virtual environment
+      run: deactivate
+    
+    - name: Run Python tests with coverage
+      run: coverage run -m unittest discover API
+    
+    - name: Generate code coverage report
+      run: coverage html --directory=coverage-report
+      
+    - name: Lint Python code
+      run: |
+        pip install flake8
+        flake8 API
