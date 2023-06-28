@@ -355,7 +355,7 @@ async def add_conversation(id_utilisateur_1: int, id_utilisateur_2: int):
     return {"status": "success", "id": c.lastrowid}
 
 @app.post("/message")
-async def add_message(id_conversation: int, id_envoyeur: int, id_utilisateur_1: int, id_utilisateur_2: int):
+async def add_message(id_conversation: int, id_envoyeur: int, contenu: str, id_utilisateur_1: int, id_utilisateur_2: int):
     # Vérifier si la conversation existe déjà
     c.execute("SELECT id_conversation FROM conversation WHERE id_conversation = ? AND id_utilisateur_1 = ? AND id_utilisateur2 = ?", (id_conversation, id_utilisateur_1, id_utilisateur_2))
     result = c.fetchone()
@@ -370,12 +370,11 @@ async def add_message(id_conversation: int, id_envoyeur: int, id_utilisateur_1: 
     date_message = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # Insérer le message dans la table message
-    c.execute("INSERT INTO message (id_conversation, id_envoyeur, date_message) VALUES (?, ?, ?)",
-    (id_conversation, id_envoyeur, date_message))
+    c.execute("INSERT INTO message (id_conversation, id_envoyeur, date_message, contenu) VALUES (?, ?, ?, ?)",
+    (id_conversation, id_envoyeur, date_message, contenu))
     conn.commit()
 
     return {"status": "success", "id": c.lastrowid}
-
 
 @app.get("/conversations/{id_utilisateur}")
 async def get_conversations(id_utilisateur: int):
@@ -397,7 +396,7 @@ async def get_conversations(id_utilisateur: int):
 @app.get("/conversations/{id_conversation}/messages")
 async def get_conversation_messages(id_conversation: int):
     # Récupérer tous les messages de la conversation
-    c.execute("SELECT id_message, id_conversation, id_envoyeur, date_message FROM message WHERE id_conversation = ? ORDER BY date_message ASC", (id_conversation,))
+    c.execute("SELECT id_message, id_conversation, id_envoyeur, date_message, contenu FROM message WHERE id_conversation = ? ORDER BY date_message ASC", (id_conversation,))
     result = c.fetchall()
 
     messages = []
@@ -406,11 +405,13 @@ async def get_conversation_messages(id_conversation: int):
             "id_message": row[0],
             "id_conversation": row[1],
             "id_envoyeur": row[2],
-            "date_message": row[3]
+            "date_message": row[3],
+            "contenu": row[4]
         }
         messages.append(message)
 
     return {"messages": messages}
+
 
 
 
