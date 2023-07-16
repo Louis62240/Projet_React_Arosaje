@@ -100,16 +100,16 @@ async def connexion(email: str, mot_de_passe: str):
         return {"connexion": False}
 
 
-# @app.get("/connexiontest")
-# async def connexion(email: str):
-#     # Récupération de l'utilisateur correspondant à l'email donné
-#     c.execute("SELECT id_utilisateurs, email, mot_de_passe FROM utilisateurs WHERE email=?", (email,))
-#     result = c.fetchone()
+@app.get("/connexiontest")
+async def connexion(email: str):
+    # Récupération de l'utilisateur correspondant à l'email donné
+    c.execute("SELECT id_utilisateurs, email, mot_de_passe FROM utilisateurs WHERE email=?", (email,))
+    result = c.fetchone()
 
-#     if result is not None :
-#         return {"id_utilisateur": result[0], "email": result[1], "mot_de_passe": result[2], "connexion": True}
-#     else:
-#         return {"connexion": False, "message": "Identifiants incorrects"}
+    if result is not None :
+        return {"id_utilisateur": result[0], "email": result[1], "mot_de_passe": result[2], "connexion": True}
+    else:
+        return {"connexion": False, "message": "Identifiants incorrects"}
 
 
 #liste toutes les plantes
@@ -228,9 +228,9 @@ async def get_plante_info(id_plante: int):
 #liste touts les utilisateurs
 @app.get("/utilisateurs")
 async def get_utilisateurs():
-    c.execute("SELECT nom, telephone, email FROM utilisateurs;")
+    c.execute("SELECT nom, telephone, email,id_utilisateurs FROM utilisateurs;")
     utilisateurs = c.fetchall()
-    return utilisateurs, status.HTTP_200_OK
+    return utilisateurs
 
 
 #donne l'id de l'utilisateur selon son nom
@@ -412,6 +412,20 @@ async def get_conversation_messages(id_conversation: int):
 
     return {"messages": messages}
 
+@app.get("/messages/{id_conversation}")
+async def get_messages(id_conversation: int):
+    # Récupérer les messages de la conversation
+    c.execute("SELECT * FROM message WHERE id_conversation = ?", (id_conversation,))
+    results = c.fetchall()
 
+    messages = []
+    for result in results:
+        message = {
+            "id_message": result[0],
+            "id_conversation": result[1],
+            "id_envoyeur": result[2],
+            "date_message": result[3]
+        }
+        messages.append(message)
 
-
+    return {"status": "success", "messages": messages}

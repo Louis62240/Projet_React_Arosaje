@@ -221,3 +221,72 @@ export const getPlantesByVille = async (ville) => {
     console.log(error);
   }
 };
+
+// Requête pour récupérer toutes les conversations d'un utilisateur
+export const getConversations = (id_utilisateur) => {
+  return axios.get(`http://127.0.0.1:8000/conversations/${id_utilisateur}`, {
+    headers: {
+      'Access-Control-Allow-Origin': 'http://localhost:3000',
+      'Content-Type': 'application/json'
+    }
+  })
+  .then((response) => {
+    return response.data; // retourne les données sous forme d'objet JSON
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+};
+
+// Requête pour ajouter une conversation
+export const addConversation = (id_utilisateur_1, id_utilisateur_2) => {
+  return axios.post(`http://127.0.0.1:8000/conversation/${id_utilisateur_1}/${id_utilisateur_2}`, {
+    headers: {
+      'Access-Control-Allow-Origin': 'http://localhost:3000',
+      'Content-Type': 'application/json'
+    }
+  })
+  .then((response) => {
+    return response.data; // retourne les données sous forme d'objet JSON
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+};
+
+// Requête pour ajouter un message à une conversation
+export const addMessage = (id_conversation, id_envoyeur, id_utilisateur_1, id_utilisateur_2) => {
+  return axios.post(`http://127.0.0.1:8000/message`, {
+    id_conversation: id_conversation,
+    id_envoyeur: id_envoyeur,
+    id_utilisateur_1: id_utilisateur_1,
+    id_utilisateur_2: id_utilisateur_2
+  }, {
+    headers: {
+      'Access-Control-Allow-Origin': 'http://localhost:3000',
+      'Content-Type': 'application/json'
+    }
+  })
+  .then((response) => {
+    return response.data; // retourne les données sous forme d'objet JSON
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+};
+
+export const getUsers = async () => {
+  try {
+    const response = await axios.get("http://127.0.0.1:8000/utilisateurs", {
+      headers: {
+        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log(response.data);
+    return response.data; // retourne les données sous forme d'objet JSON
+  } catch (error) {
+    console.log(error);
+  }
+};
+
